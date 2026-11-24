@@ -1,0 +1,50 @@
+groups:
+  - name: taskmanager.rules
+    rules:
+      - alert: TaskManagerDown
+        expr: up{job="taskmanager"} == 0
+        for: 1m
+        labels: { severity: critical }
+        annotations:
+          summary: "Task Manager is not responding to scrapes"
+          description: "Prometheus could not scrape {{ $labels.instance }} for 1 minute."
+
+      - alert: HighErrorRate
+        expr: |
+          sum(rate(taskmanager_http_requests_total{status=~"5.."}[5m]))
+            / clamp_min(sum(rate(taskmanager_http_requests_total[5m])), 1e-9) > 0.05
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: "More than 5% of requests are failing"
+
+      - alert: HighLatencyP95
+        expr: |
+          histogram_quantile(0.95, sum by (le) (rate(taskmanager_http_request_duration_seconds_bucket[5m]))) > 0.5
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: "p95 latency above 500ms"
+
+      - alert: ContainerHighMemory
+        expr: |
+          container_memory_working_set_bytes{name=~".*app.*"}
+            / clamp_min(container_spec_memory_limit_bytes{name=~".*app.*"}, 1) > 0.9
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: "Container {{ $labels.name }} is using more than 90% of its memory limit"
+
+      - alert: HostHighCPU
+        expr: 100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 85
+        for: 10m
+        labels: { severity: warning }
+        annotations:
+          summary: "Host CPU above 85% for 10 minutes"
+
+      - alert: TooManyFailedLogins
+        expr: sum(rate(taskmanager_http_requests_total{endpoint=~"/api/auth/login|/login", status="401"}[5m])) > 1
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: "Possible brute-force attack: more than 1 failed login per second"
