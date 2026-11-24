@@ -1,0 +1,33 @@
+# Statically provisioned PersistentVolumes (hostPath - suitable for minikube / kind / single-node kubeadm).
+# On a cloud cluster you would delete these and let the PVCs use the default StorageClass (e.g. gp3).
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: taskmanager-postgres-pv
+  labels:
+    volume: taskmanager-postgres
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes: ["ReadWriteOnce"]
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: manual
+  hostPath:
+    path: /data/taskmanager/postgres
+    type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: taskmanager-backup-pv
+  labels:
+    volume: taskmanager-backup
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes: ["ReadWriteOnce"]
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: manual
+  hostPath:
+    path: /data/taskmanager/backups
+    type: DirectoryOrCreate

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}{{ code }} · Task Manager{% endblock %}
+{% block content %}
+<section class="card empty">
+  <h1>{{ code }} &mdash; {{ name }}</h1>
+  <p class="muted">{{ description }}</p>
+  <a class="btn btn-primary" href="{{ url_for('web.dashboard') }}">Back to tasks</a>
+</section>
+{% endblock %}

@@ -1,0 +1,39 @@
+# Tell Prometheus Operator to scrape /metrics on every Task Manager pod (both colours).
+apiVersion: v1
+kind: Service
+metadata:
+  name: taskmanager-metrics
+  namespace: taskmanager
+  labels:
+    app: taskmanager
+    role: metrics
+spec:
+  clusterIP: None
+  selector:
+    app: taskmanager
+  ports:
+    - name: http
+      port: 5000
+      targetPort: http
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: taskmanager
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  namespaceSelector:
+    matchNames: [taskmanager]
+  selector:
+    matchLabels:
+      app: taskmanager
+      role: metrics
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s
+      relabelings:
+        - sourceLabels: [__meta_kubernetes_pod_label_color]
+          targetLabel: color

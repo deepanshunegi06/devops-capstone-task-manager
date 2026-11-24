@@ -1,0 +1,7 @@
+# Create the real (encrypted) file - never commit it unencrypted:
+#   cp group_vars/all/vault.yml.example group_vars/all/vault.yml
+#   ansible-vault encrypt group_vars/all/vault.yml
+#   ansible-playbook site.yml --ask-vault-pass
+vault_app_secret_key: "change-me-64-hex-chars"
+vault_app_db_password: "change-me"
+vault_app_admin_password: "change-me"

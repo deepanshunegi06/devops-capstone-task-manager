@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1180" width="1200" height="1180" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+    <marker id="arrowg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/>
+    </marker>
+    <style>
+      .main { fill: #eef2ff; stroke: #4338ca; stroke-width: 2; }
+      .side { fill: #f8fafc; stroke: #94a3b8; stroke-width: 1.5; }
+      .sec  { fill: #fef2f2; stroke: #dc2626; stroke-width: 1.5; }
+      .ops  { fill: #ecfdf5; stroke: #059669; stroke-width: 1.5; }
+      .git  { fill: #f5f3ff; stroke: #7c3aed; stroke-width: 1.5; }
+      .iac  { fill: #fffbeb; stroke: #d97706; stroke-width: 1.5; }
+      .t  { font-size: 20px; font-weight: 700; fill: #1e1b4b; text-anchor: middle; }
+      .s  { font-size: 13px; fill: #475569; text-anchor: middle; }
+      .st { font-size: 15px; font-weight: 700; fill: #0f172a; text-anchor: middle; }
+      .lbl { font-size: 12px; fill: #334155; }
+      .flow { stroke: #334155; stroke-width: 2.2; fill: none; marker-end: url(#arrow); }
+      .dash { stroke: #64748b; stroke-width: 1.5; fill: none; stroke-dasharray: 6 4; marker-end: url(#arrow); }
+      .gitops { stroke: #7c3aed; stroke-width: 2; fill: none; stroke-dasharray: 7 4; marker-end: url(#arrowg); }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="1180" fill="#ffffff"/>
+  <text x="600" y="38" class="t" font-size="24">Task Manager - End-to-End DevOps Pipeline (ENSP461 Capstone)</text>
+
+  <!-- ============ main vertical flow ============ -->
+  <g>
+    <rect x="450" y="70"  width="300" height="72" rx="12" class="main"/>
+    <text x="600" y="102" class="t">Developer</text>
+    <text x="600" y="124" class="s">feature branch -> PR -> merge to main</text>
+
+    <rect x="450" y="190" width="300" height="72" rx="12" class="main"/>
+    <text x="600" y="222" class="t">GitHub</text>
+    <text x="600" y="244" class="s">source + Jenkinsfile + k8s/ manifests</text>
+
+    <rect x="450" y="310" width="300" height="72" rx="12" class="main"/>
+    <text x="600" y="342" class="t">Jenkins (CI)</text>
+    <text x="600" y="364" class="s">lint · test · coverage · package</text>
+
+    <rect x="450" y="430" width="300" height="72" rx="12" class="main"/>
+    <text x="600" y="462" class="t">Docker</text>
+    <text x="600" y="484" class="s">multi-stage image -> Docker Hub</text>
+
+    <rect x="450" y="550" width="300" height="92" rx="12" class="main"/>
+    <text x="600" y="582" class="t">Kubernetes</text>
+    <text x="600" y="604" class="s">Blue / Green Deployments · Services</text>
+    <text x="600" y="624" class="s">ConfigMap · Secret · PV/PVC · HPA · Ingress</text>
+
+    <rect x="450" y="690" width="300" height="72" rx="12" class="main"/>
+    <text x="600" y="722" class="t">Monitoring</text>
+    <text x="600" y="744" class="s">Prometheus + Grafana + alerts</text>
+
+    <rect x="450" y="810" width="300" height="72" rx="12" class="main"/>
+    <text x="600" y="842" class="t">Logging</text>
+    <text x="600" y="864" class="s">Fluentd -> Elasticsearch -> Kibana</text>
+
+    <rect x="450" y="930" width="300" height="72" rx="12" class="main"/>
+    <text x="600" y="962" class="t">End User</text>
+    <text x="600" y="984" class="s">browser / REST API via NGINX Ingress</text>
+
+    <path d="M600 142 V188" class="flow"/>
+    <path d="M600 262 V308" class="flow"/>
+    <path d="M600 382 V428" class="flow"/>
+    <path d="M600 502 V548" class="flow"/>
+    <path d="M600 642 V688" class="flow"/>
+    <path d="M600 762 V808" class="flow"/>
+    <path d="M600 882 V928" class="flow"/>
+    <text x="610" y="292" class="lbl">webhook on every push</text>
+    <text x="610" y="532" class="lbl">image tag committed to Git</text>
+  </g>
+
+  <!-- ============ left: security / quality ============ -->
+  <rect x="60" y="290" width="300" height="112" rx="10" class="sec"/>
+  <text x="210" y="316" class="st">DevSecOps gates</text>
+  <text x="210" y="338" class="s">SonarQube + quality gate</text>
+  <text x="210" y="356" class="s">Bandit (SAST) · Hadolint</text>
+  <text x="210" y="374" class="s">Trivy image + config scan</text>
+  <text x="210" y="392" class="s">Jenkins credentials store</text>
+  <path d="M450 346 H362" class="dash"/>
+
+  <rect x="60" y="430" width="300" height="72" rx="10" class="side"/>
+  <text x="210" y="460" class="st">Docker Hub registry</text>
+  <text x="210" y="482" class="s">deepanshunegi06/taskmanager:&lt;build&gt;-&lt;sha&gt;</text>
+  <path d="M450 466 H362" class="dash"/>
+
+  <rect x="60" y="545" width="300" height="102" rx="10" class="sec"/>
+  <text x="210" y="571" class="st">Cluster security</text>
+  <text x="210" y="593" class="s">RBAC · ServiceAccounts · NetworkPolicy</text>
+  <text x="210" y="611" class="s">non-root, read-only rootfs, drop ALL caps</text>
+  <text x="210" y="629" class="s">Pod Security Admission · Secrets</text>
+  <path d="M362 596 H448" class="dash"/>
+
+  <rect x="60" y="690" width="300" height="72" rx="10" class="side"/>
+  <text x="210" y="720" class="st">Alerting / notifications</text>
+  <text x="210" y="742" class="s">Alertmanager · Slack · e-mail</text>
+  <path d="M450 726 H362" class="dash"/>
+
+  <rect x="60" y="810" width="300" height="72" rx="10" class="side"/>
+  <text x="210" y="840" class="st">Log analysis (bonus)</text>
+  <text x="210" y="862" class="s">anomaly detection on error rate</text>
+  <path d="M450 846 H362" class="dash"/>
+
+  <!-- ============ right: GitOps + IaC ============ -->
+  <rect x="840" y="190" width="300" height="92" rx="10" class="git"/>
+  <text x="990" y="218" class="st">ArgoCD (GitOps)</text>
+  <text x="990" y="240" class="s">watches k8s/ on main</text>
+  <text x="990" y="258" class="s">auto-sync · self-heal · prune</text>
+  <path d="M750 226 H838" class="gitops"/>
+  <path d="M1140 236 H1170 V560 H752" class="gitops"/>
+  <text x="1050" y="470" class="lbl" fill="#7c3aed">sync desired state</text>
+
+  <rect x="840" y="310" width="300" height="92" rx="10" class="git"/>
+  <text x="990" y="336" class="st">Blue-Green release</text>
+  <text x="990" y="356" class="s">Jenkins bumps idle colour in Git</text>
+  <text x="990" y="374" class="s">verify preview -> approve -> flip</text>
+  <text x="990" y="392" class="s">Service selector (instant rollback)</text>
+  <path d="M750 360 H838" class="dash"/>
+
+  <rect x="840" y="690" width="300" height="160" rx="10" class="iac"/>
+  <text x="990" y="716" class="st">Infrastructure as Code</text>
+  <text x="990" y="740" class="s">Terraform: VPC · subnets · SGs · EC2</text>
+  <text x="990" y="758" class="s">(modules, variables, outputs)</text>
+  <text x="990" y="782" class="s">-> generates Ansible inventory</text>
+  <text x="990" y="806" class="s">Ansible: Docker · kubeadm cluster</text>
+  <text x="990" y="824" class="s">config mgmt · app deployment</text>
+  <path d="M840 740 H800 V600 H752" class="dash"/>
+  <text x="760" y="680" class="lbl">provisions</text>
+
+  <!-- legend -->
+  <g transform="translate(60,1050)">
+    <rect width="1080" height="96" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="20" y="28" class="st" style="text-anchor:start">Legend</text>
+    <path d="M20 52 H80" class="flow"/><text x="90" y="56" class="lbl">main delivery flow</text>
+    <path d="M250 52 H310" class="dash"/><text x="320" y="56" class="lbl">supporting tool / integration</text>
+    <path d="M540 52 H600" class="gitops"/><text x="610" y="56" class="lbl">GitOps reconciliation (pull)</text>
+    <rect x="20" y="66" width="16" height="16" class="sec"/><text x="44" y="79" class="lbl">security</text>
+    <rect x="140" y="66" width="16" height="16" class="git"/><text x="164" y="79" class="lbl">GitOps / release strategy</text>
+    <rect x="360" y="66" width="16" height="16" class="iac"/><text x="384" y="79" class="lbl">infrastructure as code</text>
+    <text x="1060" y="79" class="lbl" text-anchor="end">Deepanshu Negi · 2301350026 · B.Tech CSE Sem VII</text>
+  </g>
+</svg>

@@ -1,0 +1,31 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.9.6, pytest-8.3.3, pluggy-1.6.0
+rootdir: /Users/deepanshu.negi/Documents/Codex/2026-11-17/bro-give-me-a-prompt-for/claude-handoff/taskmanager-devops-capstone
+configfile: setup.cfg
+testpaths: tests
+plugins: cov-5.0.0
+collected 33 items
+
+tests/test_auth.py ...........                                           [ 33%]
+tests/test_log_analyzer.py ...                                           [ 42%]
+tests/test_tasks_api.py .........                                        [ 69%]
+tests/test_web_and_ops.py ..........                                     [100%]
+
+---------- coverage: platform darwin, python 3.9.6-final-0 -----------
+Name                           Stmts   Miss Branch BrPart  Cover   Missing
+--------------------------------------------------------------------------
+taskmanager/__init__.py           66      4      6      1    93%   63-65, 87
+taskmanager/api.py                69      0     14      0   100%
+taskmanager/auth.py               97      1     20      1    98%   123
+taskmanager/config.py             20      0      0      0   100%
+taskmanager/models.py             37      0      0      0   100%
+taskmanager/observability.py      72      4     10      0    95%   48-49, 107-108
+taskmanager/security.py           24      0      8      0   100%
+taskmanager/validation.py         52      2     32      2    95%   37, 43
+taskmanager/web.py                65      0     14      1    99%   73->76
+--------------------------------------------------------------------------
+TOTAL                            502     11    104      5    97%
+
+Required test coverage of 85.0% reached. Total coverage: 97.36%
+
+============================== 33 passed in 8.14s ==============================

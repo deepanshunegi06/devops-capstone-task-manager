@@ -1,0 +1,74 @@
+# Application deployment on Kubernetes.
+#   gitops  : install ArgoCD and register the Application -> ArgoCD deploys k8s/ from Git
+#   kubectl : apply k8s/ directly and wait for the rollout
+- name: Install git
+  ansible.builtin.apt:
+    name: git
+    state: present
+
+- name: Check out the application repository
+  ansible.builtin.git:
+    repo: "{{ app_repo }}"
+    dest: "{{ app_dir }}"
+    version: "{{ app_repo_version }}"
+    force: true
+
+- name: Create the application namespace
+  become: false
+  ansible.builtin.shell: kubectl create namespace {{ app_namespace }} --dry-run=client -o yaml | kubectl apply -f -
+  changed_when: false
+
+- name: Create / update the application Secret from ansible-vault values
+  become: false
+  no_log: true          # never print secret values in Ansible output
+  ansible.builtin.shell: |
+    kubectl -n {{ app_namespace }} create secret generic taskmanager-secret \
+      --from-literal=POSTGRES_USER=taskmanager \
+      --from-literal=POSTGRES_PASSWORD='{{ app_db_password }}' \
+      --from-literal=SECRET_KEY='{{ app_secret_key }}' \
+      --from-literal=ADMIN_PASSWORD='{{ app_admin_password }}' \
+      --dry-run=client -o yaml | kubectl apply -f -
+  changed_when: false
+
+- name: Deploy with ArgoCD (GitOps)
+  when: deploy_mode == 'gitops'
+  become: false
+  block:
+    - name: Install ArgoCD
+      ansible.builtin.shell: |
+        kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
+        kubectl apply -n argocd -f {{ argocd_manifest }}
+      changed_when: true
+
+    - name: Wait for the ArgoCD server
+      ansible.builtin.command: kubectl -n argocd rollout status deployment/argocd-server --timeout=300s
+      changed_when: false
+
+    - name: Register the AppProject and Application
+      ansible.builtin.command: kubectl apply -f {{ app_dir }}/argocd/project.yaml -f {{ app_dir }}/argocd/application.yaml
+      changed_when: true
+
+- name: Deploy with kubectl
+  when: deploy_mode == 'kubectl'
+  become: false
+  ansible.builtin.command: kubectl apply -k {{ app_dir }}/k8s
+  changed_when: true
+
+- name: Wait for the live deployment to roll out
+  become: false
+  ansible.builtin.command: kubectl -n {{ app_namespace }} rollout status deployment/taskmanager-blue --timeout=600s
+  register: rollout
+  retries: 10
+  delay: 15
+  until: rollout.rc == 0
+  changed_when: false
+
+- name: Show pods
+  become: false
+  ansible.builtin.command: kubectl -n {{ app_namespace }} get pods -o wide
+  register: pods
+  changed_when: false
+
+- name: Deployment result
+  ansible.builtin.debug:
+    var: pods.stdout_lines

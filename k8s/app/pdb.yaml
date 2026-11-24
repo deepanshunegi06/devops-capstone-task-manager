@@ -1,0 +1,17 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: taskmanager-blue
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels: { app: taskmanager, color: blue }
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: taskmanager-green
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels: { app: taskmanager, color: green }

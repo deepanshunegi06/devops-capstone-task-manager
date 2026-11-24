@@ -1,0 +1,4 @@
+- name: Deploy the Task Manager to Kubernetes
+  hosts: control_plane
+  roles:
+    - app_deploy

@@ -1,0 +1,37 @@
+# Shared configuration for every host (configuration management lives here, not on the servers).
+timezone: Asia/Kolkata
+admin_users:
+  - name: deploy
+    groups: [sudo, docker]
+
+base_packages:
+  - curl
+  - git
+  - htop
+  - jq
+  - unzip
+  - ca-certificates
+  - gnupg
+  - chrony
+  - fail2ban
+  - ufw
+
+kubernetes_version: "1.31"
+pod_network_cidr: 10.244.0.0/16
+flannel_manifest: https://github.com/flannel-io/flannel/releases/download/v0.26.1/kube-flannel.yml
+ingress_nginx_manifest: https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.11.3/deploy/static/provider/baremetal/deploy.yaml
+metrics_server_manifest: https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.7.2/components.yaml
+argocd_manifest: https://raw.githubusercontent.com/argoproj/argo-cd/v2.13.1/manifests/install.yaml
+
+app_repo: https://github.com/deepanshunegi06/devops-capstone-task-manager.git
+app_repo_version: main
+app_namespace: taskmanager
+app_dir: /opt/taskmanager
+# deploy_mode: gitops  -> install ArgoCD and let it sync k8s/ from Git (default)
+#              kubectl -> apply k8s/ directly (useful without ArgoCD)
+deploy_mode: gitops
+
+# Secrets come from ansible-vault (group_vars/all/vault.yml - see vault.yml.example).
+app_secret_key: "{{ vault_app_secret_key }}"
+app_db_password: "{{ vault_app_db_password }}"
+app_admin_password: "{{ vault_app_admin_password }}"

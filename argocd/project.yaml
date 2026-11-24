@@ -1,0 +1,34 @@
+# ArgoCD AppProject: restricts what the Task Manager application may deploy and where (RBAC for GitOps).
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: taskmanager
+  namespace: argocd
+spec:
+  description: Task Manager capstone project
+  sourceRepos:
+    - https://github.com/deepanshunegi06/devops-capstone-task-manager.git
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: taskmanager
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+    - group: ""
+      kind: PersistentVolume
+  namespaceResourceWhitelist:
+    - group: "*"
+      kind: "*"
+  roles:
+    - name: read-only
+      description: Developers can view sync status but not sync or delete
+      policies:
+        - p, proj:taskmanager:read-only, applications, get, taskmanager/*, allow
+      groups:
+        - taskmanager-developers
+    - name: release-manager
+      description: Can sync and roll back the application
+      policies:
+        - p, proj:taskmanager:release-manager, applications, get, taskmanager/*, allow
+        - p, proj:taskmanager:release-manager, applications, sync, taskmanager/*, allow
+        - p, proj:taskmanager:release-manager, applications, action/*, taskmanager/*, allow
