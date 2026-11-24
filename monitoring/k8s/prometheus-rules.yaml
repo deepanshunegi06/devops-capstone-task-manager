@@ -1,0 +1,38 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: taskmanager
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: taskmanager.k8s
+      rules:
+        - alert: TaskManagerPodNotReady
+          expr: sum(kube_pod_status_ready{namespace="taskmanager", condition="true"}) < 2
+          for: 5m
+          labels: { severity: critical }
+          annotations:
+            summary: Fewer than 2 Task Manager pods are ready
+        - alert: TaskManagerCrashLooping
+          expr: increase(kube_pod_container_status_restarts_total{namespace="taskmanager"}[15m]) > 3
+          labels: { severity: warning }
+          annotations:
+            summary: "Pod {{ $labels.pod }} restarted more than 3 times in 15 minutes"
+        - alert: TaskManagerHighErrorRate
+          expr: |
+            sum(rate(taskmanager_http_requests_total{status=~"5.."}[5m]))
+              / clamp_min(sum(rate(taskmanager_http_requests_total[5m])), 1e-9) > 0.05
+          for: 5m
+          labels: { severity: warning }
+          annotations:
+            summary: More than 5% of requests are failing
+        - alert: TaskManagerPodHighMemory
+          expr: |
+            sum by (pod) (container_memory_working_set_bytes{namespace="taskmanager", container="taskmanager"})
+              / sum by (pod) (kube_pod_container_resource_limits{namespace="taskmanager", resource="memory"}) > 0.9
+          for: 5m
+          labels: { severity: warning }
+          annotations:
+            summary: "Pod {{ $labels.pod }} is above 90% of its memory limit"
