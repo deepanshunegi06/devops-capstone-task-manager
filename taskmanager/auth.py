@@ -5,7 +5,9 @@ from flask import (Blueprint, current_app, flash, g, jsonify, redirect, render_t
                    request, session, url_for)
 from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
 
-from .models import User, db
+import random
+
+from .models import PALETTE, User, db
 from .validation import ValidationError, validate_credentials
 
 auth_bp = Blueprint("auth", __name__)
@@ -36,6 +38,14 @@ def load_current_user():
     return db.session.get(User, uid) if uid else None
 
 
+def new_user(username, password, display_name=None):
+    user = User(username=username, display_name=(display_name or "").strip()[:80] or None,
+                avatar_color=random.choice(PALETTE))  # nosec B311
+    user.set_password(password)
+    db.session.add(user)
+    return user
+
+
 def login_required(view):
     @wraps(view)
     def wrapper(*args, **kwargs):
@@ -59,9 +69,7 @@ def api_register():
         return jsonify(error="validation_error", fields=exc.errors), 400
     if User.query.filter_by(username=username).first():
         return jsonify(error="conflict", message="Username already exists."), 409
-    user = User(username=username)
-    user.set_password(password)
-    db.session.add(user)
+    user = new_user(username, password, data.get("display_name"))
     db.session.commit()
     current_app.logger.info("user registered", extra={"user": username})
     return jsonify(user=user.to_dict(), token=issue_token(user)), 201
@@ -79,7 +87,7 @@ def api_login():
 
 @auth_bp.get("/api/auth/me")
 @login_required
-def api_me():
+def api_me():  # kept for v1 clients; /api/me is the v2 endpoint
     return jsonify(user=g.user.to_dict())
 
 
@@ -87,6 +95,8 @@ def api_me():
 
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
+    if request.method == "GET" and session.get("user_id"):
+        return redirect(url_for("web.app_shell"))
     if request.method == "POST":
         user = User.query.filter_by(username=request.form.get("username", "").strip()).first()
         if user and user.check_password(request.form.get("password", "")):
@@ -94,7 +104,7 @@ def login():
             session["user_id"] = user.id
             nxt = request.args.get("next", "")
             return redirect(nxt if nxt.startswith("/") and not nxt.startswith("//")
-                            else url_for("web.dashboard"))
+                            else url_for("web.app_shell"))
         current_app.logger.warning("failed login", extra={"user": request.form.get("username")})
         flash("Invalid username or password.", "error")
     return render_template("login.html")
@@ -112,14 +122,11 @@ def register():
         if User.query.filter_by(username=username).first():
             flash("Username already exists.", "error")
             return render_template("register.html"), 409
-        user = User(username=username)
-        user.set_password(password)
-        db.session.add(user)
+        user = new_user(username, password, request.form.get("display_name"))
         db.session.commit()
         session.clear()
         session["user_id"] = user.id
-        flash("Welcome! Your account was created.", "success")
-        return redirect(url_for("web.dashboard"))
+        return redirect(url_for("web.app_shell"))
     return render_template("register.html")
 
 
