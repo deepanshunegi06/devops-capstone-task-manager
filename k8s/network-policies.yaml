@@ -1,0 +1,37 @@
+# Zero-trust networking inside the namespace:
+#  - only app pods may reach PostgreSQL
+#  - app pods accept traffic only from the ingress controller, Prometheus and in-namespace pods
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: postgres-allow-app-only
+spec:
+  podSelector:
+    matchLabels: { app: postgres }
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels: { app: taskmanager }
+        - podSelector:
+            matchLabels: { app: postgres-backup }
+      ports:
+        - port: 5432
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: taskmanager-ingress
+spec:
+  podSelector:
+    matchLabels: { app: taskmanager }
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels: { kubernetes.io/metadata.name: ingress-nginx }
+        - namespaceSelector:
+            matchLabels: { kubernetes.io/metadata.name: monitoring }
+        - podSelector: {}
+      ports:
+        - port: 5000

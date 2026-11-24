@@ -1,0 +1,18 @@
+# LIVE service - all user traffic (via the Ingress) goes here.
+# Blue-green switch = change `spec.selector.color` in Git (Jenkins does it after approval).
+apiVersion: v1
+kind: Service
+metadata:
+  name: taskmanager
+  labels:
+    app: taskmanager
+    role: live
+spec:
+  type: ClusterIP
+  selector:
+    app: taskmanager
+    color: blue
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

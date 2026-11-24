@@ -1,0 +1,46 @@
+# Blue-green: both slots run side by side; `activeColor` decides which one the live Service selects.
+activeColor: blue
+
+image:
+  repository: deepanshunegi06/taskmanager
+  pullPolicy: IfNotPresent
+
+slots:
+  blue:
+    tag: "1.0.0"
+  green:
+    tag: "1.0.0"
+
+# Name of a pre-created Secret with POSTGRES_USER, POSTGRES_PASSWORD, SECRET_KEY, ADMIN_PASSWORD
+existingSecret: taskmanager-secret
+
+config:
+  LOG_LEVEL: INFO
+  POSTGRES_DB: taskmanager
+  POSTGRES_HOST: postgres
+  POSTGRES_PORT: "5432"
+  GUNICORN_WORKERS: "2"
+  GUNICORN_THREADS: "4"
+  ADMIN_USERNAME: admin
+
+resources:
+  requests: { cpu: 100m, memory: 128Mi }
+  limits: { cpu: 500m, memory: 256Mi }
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+
+ingress:
+  enabled: true
+  className: nginx
+  host: taskmanager.local
+  previewHost: preview.taskmanager.local
+
+postgres:
+  enabled: true
+  image: postgres:16-alpine
+  storage: 2Gi
+  storageClassName: ""        # "" = cluster default StorageClass

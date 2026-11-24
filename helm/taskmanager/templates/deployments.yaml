@@ -1,0 +1,90 @@
+{{- range $color, $slot := .Values.slots }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: taskmanager-{{ $color }}
+  labels:
+    {{- include "taskmanager.labels" $ | nindent 4 }}
+    app: taskmanager
+    color: {{ $color }}
+spec:
+  {{- if not $.Values.autoscaling.enabled }}
+  replicas: 2
+  {{- end }}
+  revisionHistoryLimit: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: { maxSurge: 1, maxUnavailable: 0 }
+  selector:
+    matchLabels: { app: taskmanager, color: {{ $color }} }
+  template:
+    metadata:
+      labels: { app: taskmanager, color: {{ $color }} }
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "5000"
+        checksum/config: {{ toYaml $.Values.config | sha256sum }}
+    spec:
+      serviceAccountName: taskmanager-app
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+        - name: taskmanager
+          image: "{{ $.Values.image.repository }}:{{ $slot.tag }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          ports:
+            - { name: http, containerPort: 5000 }
+          envFrom:
+            - configMapRef: { name: taskmanager-config }
+          env:
+            - { name: APP_VERSION, value: {{ $slot.tag | quote }} }
+            - { name: DEPLOY_COLOR, value: {{ $color }} }
+            {{- range $key := list "POSTGRES_USER" "POSTGRES_PASSWORD" "SECRET_KEY" "ADMIN_PASSWORD" }}
+            - name: {{ $key }}
+              valueFrom:
+                secretKeyRef: { name: {{ $.Values.existingSecret }}, key: {{ $key }} }
+            {{- end }}
+            - name: DATABASE_URL
+              value: "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DB)"
+          readinessProbe:
+            httpGet: { path: /health/ready, port: http }
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: { path: /health/live, port: http }
+            periodSeconds: 10
+          resources:
+            {{- toYaml $.Values.resources | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: { drop: ["ALL"] }
+          volumeMounts:
+            - { name: tmp, mountPath: /tmp }
+            - { name: shm, mountPath: /dev/shm }
+      volumes:
+        - { name: tmp, emptyDir: {} }
+        - name: shm
+          emptyDir: { medium: Memory, sizeLimit: 64Mi }
+{{- if $.Values.autoscaling.enabled }}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: taskmanager-{{ $color }}
+  labels:
+    {{- include "taskmanager.labels" $ | nindent 4 }}
+spec:
+  scaleTargetRef: { apiVersion: apps/v1, kind: Deployment, name: taskmanager-{{ $color }} }
+  minReplicas: {{ $.Values.autoscaling.minReplicas }}
+  maxReplicas: {{ $.Values.autoscaling.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target: { type: Utilization, averageUtilization: {{ $.Values.autoscaling.targetCPUUtilizationPercentage }} }
+{{- end }}
+{{- end }}

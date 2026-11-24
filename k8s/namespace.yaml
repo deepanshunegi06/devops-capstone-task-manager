@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: taskmanager
+  labels:
+    # Pod Security Admission: block privileged pods; warn/audit against the stricter 'restricted'
+    # profile. (The app pods fully satisfy 'restricted'; the official postgres image needs to start
+    # as root to fix data-directory ownership on hostPath volumes, so 'baseline' is enforced.)
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/warn: restricted
+    pod-security.kubernetes.io/audit: restricted

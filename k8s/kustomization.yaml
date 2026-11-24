@@ -1,0 +1,30 @@
+# Everything ArgoCD deploys for the Task Manager (GitOps source of truth).
+# Render locally: kubectl kustomize k8s/    Apply manually: kubectl apply -k k8s/
+# NOTE: the Secret is intentionally NOT listed here - see k8s/secret.example.yaml.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: taskmanager
+
+resources:
+  - namespace.yaml
+  - rbac.yaml
+  - configmap.yaml
+  - storage/persistent-volumes.yaml
+  - storage/persistent-volume-claims.yaml
+  - postgres/statefulset.yaml
+  - postgres/service.yaml
+  - app/deployment-blue.yaml
+  - app/deployment-green.yaml
+  - app/service.yaml
+  - app/service-preview.yaml
+  - app/ingress.yaml
+  - app/hpa.yaml
+  - app/pdb.yaml
+  - network-policies.yaml
+  - backup-cronjob.yaml
+
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: taskmanager
+      app.kubernetes.io/managed-by: argocd
+    includeSelectors: false
