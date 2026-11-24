@@ -1,0 +1,10 @@
+Task Manager deployed.
+
+  Live colour : {{ .Values.activeColor }}  (image tag {{ index .Values.slots .Values.activeColor "tag" }})
+  Idle colour : {{ include "taskmanager.idleColor" . }}
+
+  Live URL    : http://{{ .Values.ingress.host }}
+  Preview URL : http://{{ .Values.ingress.previewHost }}
+
+Switch traffic (blue-green):
+  helm upgrade {{ .Release.Name }} helm/taskmanager --reuse-values --set activeColor={{ include "taskmanager.idleColor" . }}
