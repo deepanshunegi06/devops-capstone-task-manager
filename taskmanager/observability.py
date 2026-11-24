@@ -24,6 +24,9 @@ IN_PROGRESS = Gauge("taskmanager_http_requests_in_progress", "Requests currently
 TASKS_GAUGE = Gauge("taskmanager_tasks", "Number of tasks by status", ["status"])
 USERS_GAUGE = Gauge("taskmanager_users", "Number of registered users")
 APP_INFO = Info("taskmanager_app", "Application build information")
+TASKS_CREATED = Counter("taskmanager_tasks_created_total", "Tasks created", ["source"])
+TASKS_COMPLETED = Counter("taskmanager_tasks_completed_total", "Tasks completed", ["priority"])
+FOCUS_MINUTES = Counter("taskmanager_focus_minutes_total", "Minutes logged in focus (Pomodoro) sessions")
 
 _STD_ATTRS = set(vars(logging.makeLogRecord({})).keys()) | {"message", "asctime"}
 
@@ -102,7 +105,8 @@ def register_observability(app):
         from .models import TASK_STATUSES, Task, User, db
         try:
             for status in TASK_STATUSES:
-                TASKS_GAUGE.labels(status).set(db.session.query(Task).filter_by(status=status).count())
+                TASKS_GAUGE.labels(status).set(
+                    db.session.query(Task).filter(Task.status == status, Task.deleted_at.is_(None)).count())
             USERS_GAUGE.set(db.session.query(User).count())
         except Exception:  # metrics must never fail because the DB is down
             app.logger.exception("metrics collection failed")

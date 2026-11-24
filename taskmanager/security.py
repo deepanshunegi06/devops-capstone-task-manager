@@ -18,11 +18,18 @@ def register_security(app):
     def _csrf_protect():
         if not app.config.get("CSRF_ENABLED", True):
             return
-        # JSON API uses bearer tokens (not cookies), so CSRF only applies to form posts.
-        if request.method == "POST" and not request.path.startswith("/api/"):
+        if request.method not in ("POST", "PUT", "PATCH", "DELETE"):
+            return
+        if request.path.startswith("/api/"):
+            # Bearer-token clients are not vulnerable to CSRF; anonymous calls (login/register) carry no
+            # session to abuse. Cookie-authenticated SPA calls must echo the token in a header.
+            if request.headers.get("Authorization", "").startswith("Bearer ") or not session.get("user_id"):
+                return
+            sent = request.headers.get("X-CSRF-Token", "")
+        else:
             sent = request.form.get("csrf_token", "")
-            if not sent or not hmac.compare_digest(sent, session.get("_csrf", "")):
-                abort(400, description="Invalid or missing CSRF token.")
+        if not sent or not hmac.compare_digest(sent, session.get("_csrf", "")):
+            abort(400, description="Invalid or missing CSRF token.")
 
     @app.after_request
     def _headers(response):

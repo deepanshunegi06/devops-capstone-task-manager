@@ -1,14 +1,38 @@
 {% extends "base.html" %}
-{% block title %}Register · Task Manager{% endblock %}
-{% block content %}
-<section class="card auth-card">
-  <h1>Create account</h1>
-  <form method="post" class="form">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <label>Username <input name="username" required minlength="3" maxlength="80" autocomplete="username"></label>
-    <label>Password <input name="password" type="password" required minlength="8" autocomplete="new-password"></label>
-    <button class="btn btn-primary" type="submit">Register</button>
-  </form>
-  <p class="muted">Already registered? <a href="{{ url_for('auth.login') }}">Log in</a></p>
-</section>
+{% block title %}Create account · Orbit{% endblock %}
+{% block body %}
+<div class="auth-split">
+  {% include "_auth_showcase.html" %}
+  <main class="auth-panel">
+    <div class="auth-card">
+      <a class="brand mobile-only" href="/">
+        <img src="{{ url_for('static', filename='img/orbit.svg') }}" alt="" width="32" height="32"><span>Orbit</span>
+      </a>
+      <h2>Create your account</h2>
+      <p class="muted">Free forever. Takes 10 seconds.</p>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}" role="alert">{{ message }}</div>
+        {% endfor %}
+      {% endwith %}
+      <form method="post" class="auth-form" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label class="field">
+          <span>Display name <em>(optional)</em></span>
+          <input name="display_name" maxlength="80" autocomplete="name" placeholder="Deepanshu Negi">
+        </label>
+        <label class="field">
+          <span>Username</span>
+          <input name="username" required minlength="3" maxlength="80" autocomplete="username" placeholder="letters, numbers, . or _">
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input name="password" type="password" required minlength="8" autocomplete="new-password" placeholder="At least 8 characters">
+        </label>
+        <button class="btn-primary" type="submit">Create account <span aria-hidden="true">→</span></button>
+      </form>
+      <p class="switch">Already have an account? <a href="{{ url_for('auth.login') }}">Log in</a></p>
+    </div>
+  </main>
+</div>
 {% endblock %}

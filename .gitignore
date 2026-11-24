@@ -19,3 +19,5 @@ ansible/inventory/generated.ini
 jenkins/.env
 jenkins/kubeconfig
 .claude/
+docs/report/
+docs/*.pdf

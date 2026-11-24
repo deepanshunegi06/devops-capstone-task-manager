@@ -1,8 +1,9 @@
 def test_register_returns_token(client):
-    resp = client.post("/api/auth/register", json={"username": "bob", "password": "secret1234"})
+    resp = client.post("/api/auth/register", json={"username": "bob", "password": "secret1234",
+                                                   "display_name": "Bob Builder"})
     assert resp.status_code == 201
     body = resp.get_json()
-    assert body["user"]["username"] == "bob"
+    assert body["user"]["username"] == "bob" and body["user"]["initials"] == "BB"
     assert body["token"]
 
 
@@ -38,9 +39,9 @@ def test_me_requires_auth(client, auth):
 def test_web_register_login_logout(client):
     resp = client.post("/register", data={"username": "carol", "password": "password123"})
     assert resp.status_code == 302
-    assert client.get("/").status_code == 200
+    assert client.get("/app").status_code == 200
     client.get("/logout")
-    assert client.get("/").status_code == 302
+    assert client.get("/app").status_code == 302
     resp = client.post("/login", data={"username": "carol", "password": "password123"})
     assert resp.status_code == 302
 
@@ -51,10 +52,15 @@ def test_web_login_bad_password(client, token):
     assert b"Invalid username or password" in resp.data
 
 
+def test_web_login_next_redirect(client, token):
+    resp = client.post("/login?next=/app", data={"username": "alice", "password": "password123"})
+    assert resp.headers["Location"] == "/app"
+
+
 def test_web_login_open_redirect_blocked(client, token):
     resp = client.post("/login?next=//evil.example.com",
                        data={"username": "alice", "password": "password123"})
-    assert resp.headers["Location"] == "/"
+    assert resp.headers["Location"] == "/app"
 
 
 def test_web_register_validation_and_duplicate(client, token):

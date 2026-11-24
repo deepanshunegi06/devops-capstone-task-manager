@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "taskmanager"
-version = "1.0.0"
-description = "Task Manager web app and REST API - ENSP461 DevOps capstone"
+version = "2.0.0"
+description = "Orbit Task Manager - web app and REST API (ENSP461 DevOps capstone)"
 readme = "README.md"
 requires-python = ">=3.9"
 authors = [{ name = "Deepanshu Negi" }]
@@ -21,4 +21,4 @@ dependencies = [
 packages = ["taskmanager"]
 
 [tool.setuptools.package-data]
-taskmanager = ["templates/*.html", "static/*"]
+taskmanager = ["templates/*.html", "static/**/*"]

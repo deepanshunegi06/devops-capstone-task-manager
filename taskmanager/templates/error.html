@@ -1,9 +1,11 @@
 {% extends "base.html" %}
-{% block title %}{{ code }} · Task Manager{% endblock %}
+{% block title %}{{ code }} · Orbit{% endblock %}
 {% block content %}
-<section class="card empty">
-  <h1>{{ code }} &mdash; {{ name }}</h1>
+<section class="error-card">
+  <img src="{{ url_for('static', filename='img/orbit.svg') }}" alt="" width="56" height="56">
+  <div class="error-code">{{ code }}</div>
+  <h1>{{ name }}</h1>
   <p class="muted">{{ description }}</p>
-  <a class="btn btn-primary" href="{{ url_for('web.dashboard') }}">Back to tasks</a>
+  <a class="btn-primary" href="/">Back to Orbit</a>
 </section>
 {% endblock %}

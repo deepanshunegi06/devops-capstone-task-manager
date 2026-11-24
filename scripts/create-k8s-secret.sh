@@ -12,10 +12,14 @@ if kubectl -n "$NS" get secret taskmanager-secret >/dev/null 2>&1; then
 fi
 
 ADMIN_PASSWORD="$(openssl rand -hex 12)"
+DEMO_PASSWORD="$(openssl rand -hex 8)"
 kubectl -n "$NS" create secret generic taskmanager-secret \
   --from-literal=POSTGRES_USER=taskmanager \
   --from-literal=POSTGRES_PASSWORD="$(openssl rand -hex 16)" \
   --from-literal=SECRET_KEY="$(openssl rand -hex 32)" \
-  --from-literal=ADMIN_PASSWORD="$ADMIN_PASSWORD"
+  --from-literal=ADMIN_PASSWORD="$ADMIN_PASSWORD" \
+  --from-literal=DEMO_PASSWORD="$DEMO_PASSWORD"
 
-echo "Secret created. Admin login -> username: admin  password: $ADMIN_PASSWORD"
+echo "Secret created."
+echo "  Admin login -> username: admin  password: $ADMIN_PASSWORD"
+echo "  Demo  login -> username: demo   password: $DEMO_PASSWORD  (workspace with sample data)"
