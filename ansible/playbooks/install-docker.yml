@@ -1,0 +1,4 @@
+- name: Install Docker Engine (CI server runs Jenkins/SonarQube in containers)
+  hosts: ci
+  roles:
+    - docker

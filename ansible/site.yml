@@ -1,0 +1,6 @@
+# Full provisioning, in order:
+#   ansible-playbook -i inventory/generated.ini site.yml --ask-vault-pass
+- import_playbook: playbooks/configure.yml
+- import_playbook: playbooks/install-docker.yml
+- import_playbook: playbooks/install-kubernetes.yml
+- import_playbook: playbooks/deploy-app.yml
