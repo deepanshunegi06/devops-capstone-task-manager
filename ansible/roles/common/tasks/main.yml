@@ -1,0 +1,91 @@
+- name: Update apt cache and upgrade packages
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: safe
+    cache_valid_time: 3600
+
+- name: Install base packages
+  ansible.builtin.apt:
+    name: "{{ base_packages }}"
+    state: present
+
+- name: Set timezone
+  community.general.timezone:
+    name: "{{ timezone }}"
+
+- name: Ensure chrony (time sync) is running
+  ansible.builtin.service:
+    name: chrony
+    state: started
+    enabled: true
+
+- name: Create admin users
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    groups: "{{ item.groups | difference(['docker']) }}"
+    append: true
+    shell: /bin/bash
+  loop: "{{ admin_users }}"
+
+- name: Harden SSH (no root login, no password auth)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^#?{{ item.key }}"
+    line: "{{ item.key }} {{ item.value }}"
+    validate: sshd -t -f %s
+  loop:
+    - { key: PermitRootLogin, value: "no" }
+    - { key: PasswordAuthentication, value: "no" }
+  notify: Restart ssh
+
+- name: Apply kernel settings
+  ansible.posix.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    sysctl_file: /etc/sysctl.d/90-taskmanager.conf
+    reload: true
+  loop:
+    - { key: vm.max_map_count, value: "262144" }      # Elasticsearch
+    - { key: fs.inotify.max_user_watches, value: "524288" }
+    - { key: net.core.somaxconn, value: "1024" }
+
+- name: Render node information file
+  ansible.builtin.template:
+    src: motd.j2
+    dest: /etc/motd
+    mode: "0644"
+
+- name: Enable fail2ban
+  ansible.builtin.service:
+    name: fail2ban
+    state: started
+    enabled: true
+
+- name: Firewall - allow SSH
+  community.general.ufw:
+    rule: allow
+    name: OpenSSH
+
+- name: Firewall - allow cluster/application ports
+  community.general.ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop: ["80", "443", "6443", "2379:2380", "10250", "10257", "10259", "30000:32767", "8081", "9000"]
+
+- name: Firewall - allow pod network (flannel VXLAN)
+  community.general.ufw:
+    rule: allow
+    port: "8472"
+    proto: udp
+
+- name: Firewall - allow routed (forwarded) pod traffic, required by Kubernetes CNI
+  community.general.ufw:
+    direction: routed
+    default: allow
+
+- name: Firewall - default deny incoming, then enable
+  community.general.ufw:
+    state: enabled
+    policy: deny
+    direction: incoming

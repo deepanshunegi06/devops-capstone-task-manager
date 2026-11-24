@@ -1,0 +1,6 @@
+# Configuration management: identical baseline on every server (packages, users, time,
+# kernel settings, firewall, SSH hardening). Safe to re-run - every task is idempotent.
+- name: Baseline configuration
+  hosts: all
+  roles:
+    - common

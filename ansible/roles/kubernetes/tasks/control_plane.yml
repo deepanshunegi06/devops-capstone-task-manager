@@ -1,0 +1,56 @@
+- name: Initialise the cluster with kubeadm
+  ansible.builtin.command: >-
+    kubeadm init
+    --pod-network-cidr={{ pod_network_cidr }}
+    --apiserver-advertise-address={{ ansible_default_ipv4.address }}
+    --apiserver-cert-extra-sans={{ ansible_host }}
+  args:
+    creates: /etc/kubernetes/admin.conf
+
+- name: Create .kube directory for {{ ansible_user }}
+  ansible.builtin.file:
+    path: "/home/{{ ansible_user }}/.kube"
+    state: directory
+    owner: "{{ ansible_user }}"
+    mode: "0700"
+
+- name: Copy admin kubeconfig for {{ ansible_user }}
+  ansible.builtin.copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "/home/{{ ansible_user }}/.kube/config"
+    remote_src: true
+    owner: "{{ ansible_user }}"
+    mode: "0600"
+
+- name: Install the Flannel pod network
+  become: false
+  ansible.builtin.command: kubectl apply -f {{ flannel_manifest }}
+  register: flannel
+  changed_when: "'created' in flannel.stdout or 'configured' in flannel.stdout"
+
+- name: Install metrics-server (needed by the HPA)
+  become: false
+  ansible.builtin.shell: |
+    kubectl apply -f {{ metrics_server_manifest }}
+    kubectl -n kube-system patch deployment metrics-server --type=json \
+      -p '[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]' || true
+  changed_when: true
+
+- name: Install the NGINX ingress controller
+  become: false
+  ansible.builtin.command: kubectl apply -f {{ ingress_nginx_manifest }}
+  changed_when: true
+
+- name: Generate the worker join command
+  ansible.builtin.command: kubeadm token create --print-join-command
+  register: join_command
+  changed_when: false
+
+- name: Share the join command with workers
+  ansible.builtin.set_fact:
+    kubeadm_join_command: "{{ join_command.stdout }}"
+
+- name: Wait for the control-plane node to become Ready
+  become: false
+  ansible.builtin.command: kubectl wait --for=condition=Ready node --all --timeout=300s
+  changed_when: false

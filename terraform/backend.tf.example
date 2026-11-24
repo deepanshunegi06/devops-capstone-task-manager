@@ -1,0 +1,11 @@
+# Remote, locked state so the infrastructure is reproducible by anyone on the team.
+# Create the bucket + table once, then: cp backend.tf.example backend.tf && terraform init -migrate-state
+terraform {
+  backend "s3" {
+    bucket         = "taskmanager-tfstate-<your-unique-suffix>"
+    key            = "capstone/terraform.tfstate"
+    region         = "ap-south-1"
+    dynamodb_table = "taskmanager-tf-locks"
+    encrypt        = true
+  }
+}

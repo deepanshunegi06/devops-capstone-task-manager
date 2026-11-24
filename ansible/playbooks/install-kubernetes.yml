@@ -1,0 +1,20 @@
+- name: Install container runtime and Kubernetes packages on all cluster nodes
+  hosts: k8s_cluster
+  roles:
+    - kubernetes
+
+- name: Initialise the control plane
+  hosts: control_plane
+  tasks:
+    - name: Run control-plane setup
+      ansible.builtin.include_role:
+        name: kubernetes
+        tasks_from: control_plane
+
+- name: Join worker nodes
+  hosts: workers
+  tasks:
+    - name: Run worker join
+      ansible.builtin.include_role:
+        name: kubernetes
+        tasks_from: worker
