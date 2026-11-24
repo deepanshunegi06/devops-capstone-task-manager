@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "taskmanager"
+version = "1.0.0"
+description = "Task Manager web app and REST API - ENSP461 DevOps capstone"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name = "Deepanshu Negi" }]
+dependencies = [
+    "Flask>=3.0,<4",
+    "Flask-SQLAlchemy>=3.1,<4",
+    "SQLAlchemy>=2.0,<3",
+    "prometheus-client>=0.20",
+    "gunicorn>=22",
+]
+
+[tool.setuptools]
+packages = ["taskmanager"]
+
+[tool.setuptools.package-data]
+taskmanager = ["templates/*.html", "static/*"]
