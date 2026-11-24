@@ -1,0 +1,107 @@
+# BLUE slot of the blue-green deployment. Jenkins only ever edits the image/APP_VERSION of the
+# *idle* slot (through Git); the Service selector decides which slot receives live traffic.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: taskmanager-blue
+  labels:
+    app: taskmanager
+    color: blue
+spec:
+  # replicas are owned by the HorizontalPodAutoscaler (k8s/app/hpa.yaml)
+  revisionHistoryLimit: 10              # keeps old ReplicaSets so `kubectl rollout undo` works
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0                 # zero-downtime rolling updates
+  selector:
+    matchLabels:
+      app: taskmanager
+      color: blue
+  template:
+    metadata:
+      labels:
+        app: taskmanager
+        color: blue
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "5000"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: taskmanager-app
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: taskmanager
+          image: deepanshunegi06/taskmanager:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: taskmanager-config
+          env:
+            - name: APP_VERSION
+              value: "1.0.0"
+            - name: DEPLOY_COLOR
+              value: blue
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef: { name: taskmanager-secret, key: POSTGRES_USER }
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: taskmanager-secret, key: POSTGRES_PASSWORD }
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef: { name: taskmanager-secret, key: SECRET_KEY }
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: taskmanager-secret, key: ADMIN_PASSWORD }
+            - name: DATABASE_URL
+              value: "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DB)"
+          startupProbe:
+            httpGet: { path: /health/live, port: http }
+            periodSeconds: 3
+            failureThreshold: 20
+          readinessProbe:
+            httpGet: { path: /health/ready, port: http }
+            periodSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet: { path: /health/live, port: http }
+            periodSeconds: 10
+            failureThreshold: 3
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits: { cpu: 500m, memory: 256Mi }
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: shm
+              mountPath: /dev/shm
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: shm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 64Mi
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels: { app: taskmanager, color: blue }

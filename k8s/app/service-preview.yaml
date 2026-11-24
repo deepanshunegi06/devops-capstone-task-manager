@@ -1,0 +1,18 @@
+# PREVIEW service - always points at the idle colour so a new release can be tested
+# (smoke tests, manual QA via preview.taskmanager.local) before it receives live traffic.
+apiVersion: v1
+kind: Service
+metadata:
+  name: taskmanager-preview
+  labels:
+    app: taskmanager
+    role: preview
+spec:
+  type: ClusterIP
+  selector:
+    app: taskmanager
+    color: green
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

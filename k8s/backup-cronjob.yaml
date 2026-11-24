@@ -1,0 +1,55 @@
+# Automated backup: nightly pg_dump to the backups PersistentVolume, keeping the last 7 dumps.
+# Restore: kubectl -n taskmanager exec -i postgres-0 -- psql -U taskmanager taskmanager < dump.sql
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-backup
+spec:
+  schedule: "0 2 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        metadata:
+          labels:
+            app: postgres-backup
+        spec:
+          restartPolicy: OnFailure
+          automountServiceAccountToken: false
+          securityContext:
+            seccompProfile: { type: RuntimeDefault }
+          containers:
+            - name: backup
+              image: postgres:16-alpine
+              command:
+                - sh
+                - -c
+                - |
+                  set -e
+                  FILE=/backups/taskmanager-$(date +%Y%m%d-%H%M%S).sql.gz
+                  pg_dump -h postgres -U "$PGUSER" "$PGDATABASE" | gzip > "$FILE"
+                  echo "backup written: $FILE"
+                  ls -1t /backups/*.sql.gz | tail -n +8 | xargs -r rm -f
+              env:
+                - name: PGUSER
+                  valueFrom:
+                    secretKeyRef: { name: taskmanager-secret, key: POSTGRES_USER }
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef: { name: taskmanager-secret, key: POSTGRES_PASSWORD }
+                - name: PGDATABASE
+                  valueFrom:
+                    configMapKeyRef: { name: taskmanager-config, key: POSTGRES_DB }
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities: { drop: ["ALL"] }
+              volumeMounts:
+                - name: backups
+                  mountPath: /backups
+          volumes:
+            - name: backups
+              persistentVolumeClaim:
+                claimName: postgres-backups
