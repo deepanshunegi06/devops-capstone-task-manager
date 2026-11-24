@@ -1,0 +1,95 @@
+# Jenkins Configuration-as-Code.
+# Every secret is read from an environment variable injected at runtime (see jenkins/docker-compose.yml
+# and jenkins/env.example) - nothing sensitive is committed to Git.
+jenkins:
+  systemMessage: "Task Manager CI/CD - configured as code (ENSP461 capstone)"
+  numExecutors: 2
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "${JENKINS_ADMIN_ID}"
+          password: "${JENKINS_ADMIN_PASSWORD}"
+        - id: "developer"
+          password: "${JENKINS_DEV_PASSWORD}"
+  # Role-Based Access Control: admins manage Jenkins, developers can only build and read.
+  authorizationStrategy:
+    roleBased:
+      roles:
+        global:
+          - name: "admin"
+            permissions: ["Overall/Administer"]
+            entries:
+              - user: "${JENKINS_ADMIN_ID}"
+          - name: "developer"
+            permissions:
+              - "Overall/Read"
+              - "Job/Read"
+              - "Job/Build"
+              - "Job/Cancel"
+              - "Job/Workspace"
+              - "Run/Replay"
+              - "View/Read"
+            entries:
+              - user: "developer"
+
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - usernamePassword:
+              scope: GLOBAL
+              id: "dockerhub-creds"
+              description: "Docker Hub push token"
+              username: "${DOCKERHUB_USER}"
+              password: "${DOCKERHUB_TOKEN}"
+          - usernamePassword:
+              scope: GLOBAL
+              id: "github-token"
+              description: "GitHub PAT for GitOps commits"
+              username: "${GITHUB_USER}"
+              password: "${GITHUB_TOKEN}"
+          - string:
+              scope: GLOBAL
+              id: "sonar-token"
+              description: "SonarQube analysis token"
+              secret: "${SONAR_TOKEN}"
+          - string:
+              scope: GLOBAL
+              id: "slack-webhook"
+              description: "Slack incoming webhook (optional)"
+              secret: "${SLACK_WEBHOOK_URL}"
+          - file:
+              scope: GLOBAL
+              id: "kubeconfig"
+              description: "kubeconfig for preview verification"
+              fileName: "kubeconfig"
+              secretBytes: "${base64:${readFile:/run/secrets/kubeconfig}}"
+
+unclassified:
+  location:
+    url: "${JENKINS_URL}"
+  sonarGlobalConfiguration:
+    buildWrapperEnabled: true
+    installations:
+      - name: "sonarqube"
+        serverUrl: "http://sonarqube:9000"
+        credentialsId: "sonar-token"
+  githubpluginconfig:
+    hookUrl: "${JENKINS_URL}github-webhook/"
+
+jobs:
+  - script: >
+      multibranchPipelineJob('taskmanager') {
+        displayName('Task Manager CI/CD')
+        branchSources {
+          github {
+            id('taskmanager-github')
+            repoOwner('deepanshunegi06')
+            repository('devops-capstone-task-manager')
+            scanCredentialsId('github-token')
+          }
+        }
+        orphanedItemStrategy { discardOldItems { numToKeep(10) } }
+        triggers { periodicFolderTrigger { interval('5m') } }
+      }
