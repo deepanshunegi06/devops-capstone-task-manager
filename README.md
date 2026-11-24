@@ -1,4 +1,4 @@
-# Task Manager - End-to-End DevOps Pipeline for a Cloud-Native Application
+# Orbit Task Manager - End-to-End DevOps Pipeline for a Cloud-Native Application
 
 **ENSP461 DevOps & Automation Lab - Capstone Project**
 Deepanshu Negi · Roll No. 2301350026 · B.Tech CSE, Semester VII
@@ -7,6 +7,12 @@ A Python Flask **Task Manager** (login, task CRUD, REST API, PostgreSQL, respons
 through a complete, automated DevOps pipeline:
 
 `Developer → GitHub → Jenkins → Docker → Kubernetes → Monitoring → Logging → End User`
+
+![Orbit](docs/screenshots/v2/02-today.png)
+
+| Board | Analytics (dark) |
+|---|---|
+| ![](docs/screenshots/v2/04-board.png) | ![](docs/screenshots/v2/14-analytics-dark.png) |
 
 ![Architecture](docs/architecture.png)
 
@@ -31,7 +37,10 @@ Auto scaling (HPA) · CI/CD security scanning (Bandit, Hadolint, Trivy, SonarQub
 reports (97%) · Slack/e-mail notifications · automated DB backup (CronJob) · AWS cloud deployment (Terraform) ·
 log analysis with anomaly detection ([scripts/log_analyzer.py](scripts/log_analyzer.py)).
 
-## The application
+## The application (Orbit v2)
+
+Projects with sharing roles, labels, sub-tasks, comments, activity history, natural-language quick add (`Pay rent tomorrow 5pm #Home @bills p1 every month`), list / board / calendar / priority-matrix views, analytics, Pomodoro focus timer, command palette (Ctrl/Cmd+K), dark mode, mobile layout, JSON/CSV export. API: [docs/API.md](docs/API.md). Demo data: `flask --app wsgi seed-demo --password <pw>`, then log in as `demo`.
+
 
 | Feature | Implementation |
 |---|---|
@@ -66,7 +75,7 @@ curl -X DELETE localhost:8080/api/tasks/1 -H "Authorization: Bearer $TOKEN"
 ```bash
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r requirements-dev.txt
-pytest --cov                      # 33 tests, 97% coverage
+pytest --cov                      # 93 tests, 98.6% coverage
 flask --app wsgi run              # http://127.0.0.1:5000
 ```
 

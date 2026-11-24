@@ -1,4 +1,4 @@
-"""Task Manager - Flask application factory."""
+"""Orbit Task Manager - Flask application factory."""
 from flask import Flask, jsonify, render_template, request
 from sqlalchemy import text
 from werkzeug.exceptions import HTTPException
@@ -7,6 +7,7 @@ from .config import Config
 from .models import User, db
 from .observability import configure_logging, register_observability
 from .security import register_security
+from .validation import ValidationError
 
 
 def create_app(config_object=Config):
@@ -20,10 +21,13 @@ def create_app(config_object=Config):
 
     from .api import api_bp
     from .auth import auth_bp
+    from .demo import register_cli, seed_demo
+    from .insights import insights_bp
+    from .projects import projects_bp
     from .web import web_bp
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(api_bp)
-    app.register_blueprint(web_bp)
+    for bp in (auth_bp, api_bp, projects_bp, insights_bp, web_bp):
+        app.register_blueprint(bp)
+    register_cli(app)
 
     register_health(app)
     register_error_handlers(app)
@@ -31,6 +35,8 @@ def create_app(config_object=Config):
     with app.app_context():
         db.create_all()
         seed_admin(app)
+        if app.config.get("DEMO_DATA"):
+            seed_demo(app)
 
     @app.context_processor
     def inject_globals():
@@ -71,6 +77,12 @@ def register_health(app):
 
 
 def register_error_handlers(app):
+    @app.errorhandler(ValidationError)
+    def handle_validation(exc):
+        db.session.rollback()
+        return jsonify(error="validation_error", message="Please fix the highlighted fields.",
+                       fields=exc.errors), 400
+
     @app.errorhandler(HTTPException)
     def handle_http(exc):
         if request.path.startswith("/api/"):

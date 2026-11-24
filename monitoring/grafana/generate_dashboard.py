@@ -88,6 +88,13 @@ panels = [
     panel("HTTP status codes", [("sum by (status) (rate(taskmanager_http_requests_total[1m]))", "{{status}}")],
           0, 39),
     panel("In-flight requests", [("sum(taskmanager_http_requests_in_progress)", "in flight")], 12, 39),
+
+    row("Product usage", 47),
+    panel("Tasks created / hour by source",
+          [("sum by (source) (increase(taskmanager_tasks_created_total[1h]))", "{{source}}")], 0, 48, w=8),
+    panel("Tasks completed / hour by priority",
+          [("sum by (priority) (increase(taskmanager_tasks_completed_total[1h]))", "{{priority}}")], 8, 48, w=8),
+    panel("Focus minutes / hour", [("sum(increase(taskmanager_focus_minutes_total[1h]))", "minutes")], 16, 48, w=8),
 ]
 
 dashboard = {

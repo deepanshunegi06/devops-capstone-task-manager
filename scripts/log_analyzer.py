@@ -65,7 +65,7 @@ def load_es(url, index, minutes, size=10000):
              "query": {"range": {"@timestamp": {"gte": f"now-{minutes}m"}}}}
     req = urllib.request.Request(f"{url.rstrip('/')}/{index}/_search", data=json.dumps(query).encode(),
                                  headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=30) as resp:  # nosec B310 - operator-supplied URL
+    with urllib.request.urlopen(req, timeout=30) as resp:  # nosec B310
         for hit in json.load(resp)["hits"]["hits"]:
             yield hit["_source"]
 

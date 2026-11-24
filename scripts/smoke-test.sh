@@ -28,7 +28,7 @@ TOKEN=$(req -X POST -H 'Content-Type: application/json' \
 
 echo "==> Creating a task"
 req -X POST -H "Authorization: Bearer ${TOKEN}" -H 'Content-Type: application/json' \
-  -d '{"title":"smoke test task","priority":"high"}' "${BASE}/api/tasks" | grep -q '"smoke test task"'
+  -d '{"title":"smoke test task","priority":1}' "${BASE}/api/tasks" | grep -q '"smoke test task"'
 
 echo "==> Listing tasks"
 req -H "Authorization: Bearer ${TOKEN}" "${BASE}/api/tasks" | grep -Eq '"count": ?1'

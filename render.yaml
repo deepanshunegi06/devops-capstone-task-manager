@@ -1,0 +1,43 @@
+# Render Blueprint - one-click public deployment of Orbit (the same Docker image the Jenkins pipeline builds).
+#   1. https://render.com/deploy?repo=https://github.com/deepanshunegi06/devops-capstone-task-manager
+#   2. Sign in with GitHub, click "Apply". Render builds the Dockerfile, creates PostgreSQL, and
+#      redeploys automatically on every push to main (continuous deployment).
+# Free tier notes: the web service sleeps after 15 min idle (first request takes ~1 min to wake up);
+# the free PostgreSQL instance expires after 30 days.
+services:
+  - type: web
+    name: orbit-taskmanager
+    runtime: docker
+    plan: free
+    region: singapore
+    branch: main
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health/ready
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: orbit-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true          # random, never stored in Git
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      - key: APP_VERSION
+        value: "2.0.0"
+      - key: DEPLOY_COLOR
+        value: blue
+      - key: GUNICORN_WORKERS
+        value: "2"
+      # Public demo workspace for evaluators (sample data only - not a secret).
+      - key: DEMO_DATA
+        value: "true"
+      - key: DEMO_PASSWORD
+        value: orbit-demo-2026
+
+databases:
+  - name: orbit-db
+    plan: free
+    region: singapore
+    databaseName: taskmanager
+    user: taskmanager

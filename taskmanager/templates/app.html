@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta name="theme-color" content="#6d5cff">
+  <title>Orbit · Task Manager</title>
+  <link rel="icon" href="{{ url_for('static', filename='img/orbit.svg') }}" type="image/svg+xml">
+  <script src="{{ url_for('static', filename='js/theme-init.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  <script type="module" src="{{ url_for('static', filename='js/app.js') }}"></script>
+</head>
+<body class="app-body">
+  <a class="skip-link" href="#view">Skip to content</a>
+  <div class="shell" id="shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navigation">
+      <div class="sidebar-head">
+        <a class="brand" href="#/today" aria-label="Orbit home">
+          <img src="{{ url_for('static', filename='img/orbit.svg') }}" alt="" width="28" height="28">
+          <span>Orbit</span>
+        </a>
+        <button class="icon-btn collapse-btn" id="collapse-btn" aria-label="Collapse sidebar"></button>
+      </div>
+      <nav class="sidebar-nav" id="sidebar-nav">
+        <div class="skeleton-stack"><i></i><i></i><i></i><i></i><i></i></div>
+      </nav>
+      <div class="sidebar-foot">
+        <span>v{{ app_version }}</span> &middot; <span class="color-tag color-{{ deploy_color }}">{{ deploy_color }}</span>
+        &middot; <a href="/health/ready" target="_blank" rel="noopener">health</a>
+      </div>
+    </aside>
+    <div class="scrim" id="scrim" hidden></div>
+
+    <main class="main" id="main">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" id="menu-btn" aria-label="Open menu"></button>
+        <div class="view-heading">
+          <h1 id="view-title">Today</h1>
+          <span class="view-sub" id="view-sub"></span>
+        </div>
+        <div class="view-switch" id="view-switch" role="tablist" aria-label="Layout"></div>
+        <div class="topbar-actions">
+          <button class="search-btn" id="search-btn" aria-label="Search and commands">
+            <span class="search-ic"></span><span class="search-label">Search or jump to…</span><kbd id="kbd-hint">⌘K</kbd>
+          </button>
+          <button class="icon-btn" id="theme-btn" aria-label="Toggle theme"></button>
+          <button class="avatar-btn" id="avatar-btn" aria-label="Account menu" aria-haspopup="menu"></button>
+        </div>
+      </header>
+      <section class="view" id="view" tabindex="-1" aria-live="polite"></section>
+    </main>
+  </div>
+
+  <nav class="bottomnav" id="bottomnav" aria-label="Primary"></nav>
+  <button class="fab" id="fab" aria-label="Add task"></button>
+
+  <div id="drawer-root"></div>
+  <div id="modal-root"></div>
+  <div id="palette-root"></div>
+  <div id="menu-root"></div>
+  <div class="toasts" id="toast-root" role="status" aria-live="polite"></div>
+</body>
+</html>

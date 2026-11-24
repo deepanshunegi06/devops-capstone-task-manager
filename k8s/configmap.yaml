@@ -12,3 +12,5 @@ data:
   GUNICORN_THREADS: "4"
   TOKEN_MAX_AGE: "86400"
   ADMIN_USERNAME: "admin"
+  # Seed the "demo" workspace on first start (password from the optional DEMO_PASSWORD secret key).
+  DEMO_DATA: "true"
