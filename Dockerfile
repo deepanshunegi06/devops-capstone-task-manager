@@ -8,10 +8,10 @@ RUN pip wheel --wheel-dir /wheels -r requirements.txt
 
 # ---------- Stage 2: minimal runtime ----------
 FROM python:3.12-slim AS runtime
-ARG APP_VERSION=1.0.0
+ARG APP_VERSION=2.0.0
 ARG GIT_COMMIT=unknown
 LABEL org.opencontainers.image.title="taskmanager" \
-      org.opencontainers.image.description="Task Manager - DevOps capstone (ENSP461)" \
+      org.opencontainers.image.description="Orbit Task Manager - DevOps capstone (ENSP461)" \
       org.opencontainers.image.version="${APP_VERSION}" \
       org.opencontainers.image.revision="${GIT_COMMIT}" \
       org.opencontainers.image.source="https://github.com/deepanshunegi06/devops-capstone-task-manager"
@@ -37,6 +37,6 @@ USER 10001
 EXPOSE 5000
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-  CMD python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:5000/health/live', timeout=2).status == 200 else 1)"
+  CMD python -c "import os,sys,urllib.request; u='http://127.0.0.1:%s/health/live' % os.environ.get('PORT','5000'); sys.exit(0 if urllib.request.urlopen(u, timeout=2).status == 200 else 1)"
 
 CMD ["gunicorn", "--config", "gunicorn.conf.py", "wsgi:app"]

@@ -48,6 +48,9 @@ spec:
               valueFrom:
                 secretKeyRef: { name: {{ $.Values.existingSecret }}, key: {{ $key }} }
             {{- end }}
+            - name: DEMO_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: {{ $.Values.existingSecret }}, key: DEMO_PASSWORD, optional: true }
             - name: DATABASE_URL
               value: "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DB)"
           readinessProbe:

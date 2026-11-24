@@ -40,7 +40,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: taskmanager
-          image: deepanshunegi06/taskmanager:1.0.0
+          image: deepanshunegi06/taskmanager:2.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -50,7 +50,7 @@ spec:
                 name: taskmanager-config
           env:
             - name: APP_VERSION
-              value: "1.0.0"
+              value: "2.0.0"
             - name: DEPLOY_COLOR
               value: green
             - name: POSTGRES_USER
@@ -65,6 +65,9 @@ spec:
             - name: ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef: { name: taskmanager-secret, key: ADMIN_PASSWORD }
+            - name: DEMO_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: taskmanager-secret, key: DEMO_PASSWORD, optional: true }
             - name: DATABASE_URL
               value: "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DB)"
           startupProbe:
