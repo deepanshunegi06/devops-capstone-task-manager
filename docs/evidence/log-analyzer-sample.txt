@@ -1,0 +1,10 @@
+Analysed 36 log records  levels={'INFO': 36}
+
+Error-rate anomalies (robust z-score):
+  none detected
+
+Most frequent warning/error patterns:
+  none
+
+Possible brute-force login attempts: none
+Slow endpoints (>500 ms): none
