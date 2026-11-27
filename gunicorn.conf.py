@@ -16,3 +16,11 @@ errorlog = "-"
 # RAM-backed heartbeat dir avoids stalls on slow disks (Linux containers); skipped where absent.
 if os.path.isdir("/dev/shm"):
     worker_tmp_dir = "/dev/shm"
+
+
+def post_fork(server, worker):
+    """Do not reuse the master's preloaded PostgreSQL pool across worker processes."""
+    from wsgi import app
+    from taskmanager.models import db
+    with app.app_context():
+        db.engine.dispose(close=False)

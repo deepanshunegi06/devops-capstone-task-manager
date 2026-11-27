@@ -17,6 +17,7 @@ class Config:
     TOKEN_MAX_AGE = int(os.environ.get("TOKEN_MAX_AGE", "86400"))
     ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
     ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "")
+    ENABLE_ANALYTICS = os.environ.get("ENABLE_ANALYTICS", "true").lower() in ("1", "true", "yes")
     DEMO_DATA = os.environ.get("DEMO_DATA", "").lower() in ("1", "true", "yes")
     DEMO_PASSWORD = os.environ.get("DEMO_PASSWORD", "")
     SESSION_COOKIE_HTTPONLY = True
@@ -29,4 +30,5 @@ class TestConfig(Config):
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
     ADMIN_PASSWORD = ""
     CSRF_ENABLED = False
+    ENABLE_ANALYTICS = os.environ.get("ENABLE_ANALYTICS", "true").lower() in ("1", "true", "yes")
     DEMO_DATA = False

@@ -1,0 +1,4 @@
+services:
+  app:
+    image: orbit-labs-app:2.0.1
+    pull_policy: never

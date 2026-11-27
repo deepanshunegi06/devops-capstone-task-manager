@@ -1,0 +1,22 @@
+---
+- name: Apply repeatable application baseline to isolated Linux container
+  hosts: app
+  gather_facts: false
+  tasks:
+    - name: Render application configuration
+      ansible.builtin.copy:
+        dest: /tmp/orbit-lab.conf
+        mode: '0600'
+        content: |
+          environment=lab
+          metrics_enabled=true
+          log_format=json
+          release=2.0.0
+    - name: Read back configuration
+      ansible.builtin.slurp:
+        src: /tmp/orbit-lab.conf
+      register: configuration
+    - name: Verify desired state
+      ansible.builtin.assert:
+        that:
+          - "'metrics_enabled=true' in (configuration.content | b64decode)"

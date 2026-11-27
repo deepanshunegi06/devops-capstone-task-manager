@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: orbit-lab-gitops
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/deepanshunegi06/devops-capstone-task-manager.git
+    targetRevision: labs-2026-11-27
+    path: labs/k8s-gitops
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: orbit-exercise
+  syncPolicy:
+    automated: {prune: true, selfHeal: true}
+    syncOptions: [CreateNamespace=true]

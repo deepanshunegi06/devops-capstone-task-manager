@@ -1,0 +1,48 @@
+pipeline {
+  agent any
+  options { timeout(time: 15, unit: 'MINUTES'); disableConcurrentBuilds() }
+  triggers { pollSCM('H/5 * * * *') }
+  stages {
+    stage('Checkout GitHub') {
+      steps { git branch: 'main', url: 'https://github.com/deepanshunegi06/devops-capstone-task-manager.git' }
+    }
+    stage('Build environment') {
+      steps { sh 'python3 -m venv .venv && .venv/bin/pip install --quiet -r requirements-dev.txt' }
+    }
+    stage('Static security gate') {
+      steps { sh '.venv/bin/bandit -r taskmanager -ll' }
+    }
+    stage('Unit and integration test gate') {
+      steps { sh 'mkdir -p reports; .venv/bin/pytest --junitxml=reports/junit.xml --cov --cov-report=xml:reports/coverage.xml' }
+    }
+    stage('Deploy and verify readiness') {
+      steps {
+        withCredentials([string(credentialsId: 'lab-app-secret', variable: 'SECRET_KEY')]) {
+          sh '''
+            set -eu
+            export DATABASE_URL="sqlite:////tmp/jenkins-lab-${BUILD_NUMBER}.db"
+            .venv/bin/gunicorn --bind 127.0.0.1:18088 --workers 1 wsgi:app > reports/deployment.log 2>&1 &
+            APP_PID=$!
+            trap 'kill "$APP_PID" 2>/dev/null || true' EXIT
+            .venv/bin/python - <<'PYCODE'
+import json,time,urllib.request
+for attempt in range(30):
+    try:
+        with urllib.request.urlopen('http://127.0.0.1:18088/health/ready',timeout=2) as response:
+            data=json.load(response)
+            assert response.status==200 and data['database']=='up'
+            print('PASS: deployment readiness, status=200, database=up')
+            break
+    except Exception:
+        if attempt==29:raise
+        time.sleep(1)
+PYCODE
+          '''
+        }
+      }
+    }
+  }
+  post {
+    always { junit allowEmptyResults: true, testResults: 'reports/junit.xml'; archiveArtifacts artifacts: 'reports/*', allowEmptyArchive: true }
+  }
+}

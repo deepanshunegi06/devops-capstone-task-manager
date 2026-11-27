@@ -29,6 +29,11 @@ def create_app(config_object=Config):
         app.register_blueprint(bp)
     register_cli(app)
 
+    @app.before_request
+    def feature_gates():
+        if request.path == "/api/analytics" and not app.config.get("ENABLE_ANALYTICS", True):
+            return jsonify(error="feature_disabled", feature="analytics"), 404
+
     register_health(app)
     register_error_handlers(app)
 
