@@ -1,0 +1,8 @@
+{
+  "requests": 1000,
+  "concurrency": 10,
+  "successes": 1000,
+  "errors": [],
+  "elapsed_s": 1.105057584,
+  "p95_ms": 18.253499999999924
+}

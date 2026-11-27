@@ -1,0 +1,6 @@
+{
+  "scenario": "blue primary stopped; green marked backup",
+  "requests": 20,
+  "success": 9,
+  "green": 9
+}

@@ -1,0 +1,15 @@
+docker_image.app: Creating...
+docker_image.app: Creation complete after 0s [id=sha256:6f0c359deb424d633c6fd5006f11293a721b4229007b39b734127eb3ac459b2adeepanshunegi06/taskmanager:2.0.0]
+docker_container.replica[0]: Creating...
+docker_container.replica[1]: Creating...
+docker_container.replica[0]: Creation complete after 1s [id=88d5d26aaafa29868b7db2d882a755bdf0d7de3885d3f262fe4fa7255f04015e]
+docker_container.replica[1]: Creation complete after 1s [id=33676145c8b13229293dd7ade7bff2ed83e6264d48e51dfa84aa285b65950bd5]
+
+Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+replica_names = [
+  "orbit-labs-tf-1",
+  "orbit-labs-tf-2",
+]

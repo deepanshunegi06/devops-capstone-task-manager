@@ -1,0 +1,25 @@
+........................................................................ [ 75%]
+.......................                                                  [100%]
+
+---------- coverage: platform darwin, python 3.9.6-final-0 -----------
+Name                           Stmts   Miss Branch BrPart  Cover   Missing
+--------------------------------------------------------------------------
+taskmanager/__init__.py           80      3     12      0    97%   74-76
+taskmanager/api.py               314      0    106      7    98%   80->82, 84->78, 99->101, 209->211, 297->292, 333->338, 338->341
+taskmanager/auth.py              100      1     22      1    98%   130
+taskmanager/config.py             25      0      0      0   100%
+taskmanager/demo.py               89      2     32      2    97%   72, 140
+taskmanager/insights.py          138      0     22      0   100%
+taskmanager/models.py            161      0      6      0   100%
+taskmanager/observability.py      75      4     10      0    95%   51-52, 111-112
+taskmanager/projects.py          109      0     26      1    99%   90->89
+taskmanager/quickadd.py          146      0     72      1    99%   138->140
+taskmanager/security.py           29      0     12      0   100%
+taskmanager/services.py           90      1     40      1    98%   126
+taskmanager/validation.py        132      1     80      3    98%   89, 125->127, 142->147
+taskmanager/web.py                10      0      0      0   100%
+--------------------------------------------------------------------------
+TOTAL                           1498     12    440     16    99%
+
+Required test coverage of 85.0% reached. Total coverage: 98.56%
+95 passed in 23.39s

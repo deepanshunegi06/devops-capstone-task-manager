@@ -1,0 +1,91 @@
+{
+  "took": 5,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 100,
+      "relation": "eq"
+    },
+    "max_score": 1.0,
+    "hits": [
+      {
+        "_index": "taskmanager-2026.11.27",
+        "_id": "rnvgHaIBkEvpE49NBAsp",
+        "_score": 1.0,
+        "_source": {
+          "timestamp": "2026-11-27T16:31:25.097183+00:00",
+          "level": "INFO",
+          "logger": "taskmanager",
+          "message": "request",
+          "service": "taskmanager",
+          "version": "2.0.0",
+          "deploy_color": "blue",
+          "request_id": "58f36934b9b3d534e06cb1ec87399bdd",
+          "method": "GET",
+          "path": "/health/ready",
+          "status": 200,
+          "duration_ms": 0.94,
+          "remote_addr": "172.21.0.3",
+          "environment": "docker-compose",
+          "source_tag": "taskmanager.app",
+          "@timestamp": "2026-11-27T16:39:04.578732423+00:00",
+          "tag": "taskmanager.app"
+        }
+      },
+      {
+        "_index": "taskmanager-2026.11.27",
+        "_id": "r3vgHaIBkEvpE49NBAsp",
+        "_score": 1.0,
+        "_source": {
+          "timestamp": "2026-11-27T16:31:25.097248+00:00",
+          "level": "INFO",
+          "logger": "taskmanager",
+          "message": "request",
+          "service": "taskmanager",
+          "version": "2.0.0",
+          "deploy_color": "blue",
+          "request_id": "e419eb2f4551af6f6bf5da8baea5f626",
+          "method": "GET",
+          "path": "/health/ready",
+          "status": 200,
+          "duration_ms": 3.06,
+          "remote_addr": "172.21.0.3",
+          "environment": "docker-compose",
+          "source_tag": "taskmanager.app",
+          "@timestamp": "2026-11-27T16:39:04.579487298+00:00",
+          "tag": "taskmanager.app"
+        }
+      },
+      {
+        "_index": "taskmanager-2026.11.27",
+        "_id": "sHvgHaIBkEvpE49NBAsp",
+        "_score": 1.0,
+        "_source": {
+          "timestamp": "2026-11-27T16:31:25.099878+00:00",
+          "level": "INFO",
+          "logger": "taskmanager",
+          "message": "request",
+          "service": "taskmanager",
+          "version": "2.0.0",
+          "deploy_color": "blue",
+          "request_id": "eba64356d00261e6f92b10850488df13",
+          "method": "GET",
+          "path": "/health/ready",
+          "status": 200,
+          "duration_ms": 1.78,
+          "remote_addr": "172.21.0.3",
+          "environment": "docker-compose",
+          "source_tag": "taskmanager.app",
+          "@timestamp": "2026-11-27T16:39:04.579962798+00:00",
+          "tag": "taskmanager.app"
+        }
+      }
+    ]
+  }
+}

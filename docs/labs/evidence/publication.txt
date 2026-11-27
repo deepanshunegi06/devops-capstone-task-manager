@@ -1,0 +1,7 @@
+remote: 
+remote: Create a pull request for 'labs-2026-11-27' on GitHub by visiting:        
+remote:      https://github.com/deepanshunegi06/devops-capstone-task-manager/pull/new/labs-2026-11-27        
+remote: 
+To https://github.com/deepanshunegi06/devops-capstone-task-manager.git
+ * [new branch]      labs-2026-11-27 -> labs-2026-11-27
+branch 'labs-2026-11-27' set up to track 'origin/labs-2026-11-27'.

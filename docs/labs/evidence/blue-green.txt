@@ -1,0 +1,60 @@
+{
+  "requests_during_switch": 103,
+  "errors": 0,
+  "observed_colors": [
+    "blue",
+    "green"
+  ],
+  "samples": [
+    {
+      "status": 200,
+      "color": "blue",
+      "ms": 34.85933299999999
+    },
+    {
+      "status": 200,
+      "color": "blue",
+      "ms": 4.65762500000011
+    },
+    {
+      "status": 200,
+      "color": "blue",
+      "ms": 16.891417000000075
+    },
+    {
+      "status": 200,
+      "color": "blue",
+      "ms": 3.164042000000755
+    },
+    {
+      "status": 200,
+      "color": "blue",
+      "ms": 2.37116699999973
+    },
+    {
+      "status": 200,
+      "color": "blue",
+      "ms": 2.701458000000656
+    },
+    {
+      "status": 200,
+      "color": "blue",
+      "ms": 3.259500000000415
+    },
+    {
+      "status": 200,
+      "color": "blue",
+      "ms": 2.1713749999996423
+    },
+    {
+      "status": 200,
+      "color": "blue",
+      "ms": 2.583249999999815
+    },
+    {
+      "status": 200,
+      "color": "blue",
+      "ms": 2.049125000000096
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+
+PLAY [Apply repeatable application baseline to isolated Linux container] *******
+
+TASK [Render application configuration] ****************************************
+[WARNING]: Collection community.docker does not support Ansible version 2.15.13
+changed: [orbit-labs-app-1]
+
+TASK [Read back configuration] *************************************************
+[WARNING]: Collection community.docker does not support Ansible version 2.15.13
+ok: [orbit-labs-app-1]
+
+TASK [Verify desired state] ****************************************************
+[WARNING]: Collection community.docker does not support Ansible version 2.15.13
+ok: [orbit-labs-app-1] => {
+    "changed": false,
+    "msg": "All assertions passed"
+}
+
+PLAY RECAP *********************************************************************
+orbit-labs-app-1           : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+

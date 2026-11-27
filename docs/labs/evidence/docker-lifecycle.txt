@@ -1,0 +1,7 @@
+orbit-labs-blue Up About a minute (healthy)
+orbit-labs-blue
+orbit-labs-blue
+disposable-container
+orbit-labs-disposable
+IMAGE                         ID             DISK USAGE   CONTENT SIZE   EXTRA
+localhost:15000/orbit:2.0.1   38f3decb3f2c        281MB         64.9MB   U    

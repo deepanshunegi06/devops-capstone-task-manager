@@ -1,0 +1,27 @@
+$ docker run --name orbit-labs-ephemeral --entrypoint sh postgres:16-alpine -c echo container-only > /tmp/lab-marker; cat /tmp/lab-marker
+container-only
+
+
+$ docker rm orbit-labs-ephemeral
+orbit-labs-ephemeral
+
+
+$ docker run --rm --entrypoint sh postgres:16-alpine -c test ! -e /tmp/lab-marker && echo PASS: container-layer data did not survive replacement
+PASS: container-layer data did not survive replacement
+
+
+$ docker volume create orbit-labs-storage
+orbit-labs-storage
+
+
+$ docker run --rm -v orbit-labs-storage:/evidence --entrypoint sh postgres:16-alpine -c echo persisted-named-volume > /evidence/marker
+
+
+$ docker run --rm -v orbit-labs-storage:/evidence --entrypoint sh postgres:16-alpine -c cat /evidence/marker
+persisted-named-volume
+
+
+$ docker run --rm -v [lab-workspace]/bind-storage:/evidence --entrypoint sh postgres:16-alpine -c echo persisted-bind-mount > /evidence/marker
+
+
+Host read: persisted-bind-mount

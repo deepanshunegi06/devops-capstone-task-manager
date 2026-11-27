@@ -1,0 +1,122 @@
+Started
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/orbit-lab-ci
+[Pipeline] {
+[Pipeline] timeout
+Timeout set to expire in 15 min
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout GitHub)
+[Pipeline] git
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://github.com/deepanshunegi06/devops-capstone-task-manager.git
+ > git init /var/jenkins_home/workspace/orbit-lab-ci # timeout=10
+Fetching upstream changes from https://github.com/deepanshunegi06/devops-capstone-task-manager.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+ > git fetch --tags --force --progress -- https://github.com/deepanshunegi06/devops-capstone-task-manager.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/deepanshunegi06/devops-capstone-task-manager.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision f00848d4778b30cd3ea6ec30df6d16eacb0d06bc (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f f00848d4778b30cd3ea6ec30df6d16eacb0d06bc # timeout=10
+ > git branch -a -v --no-abbrev # timeout=10
+ > git checkout -b main f00848d4778b30cd3ea6ec30df6d16eacb0d06bc # timeout=10
+Commit message: "Release v2.0.0: merge develop into main"
+First time build. Skipping changelog.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build environment)
+[Pipeline] sh
++ python3 -m venv .venv
++ .venv/bin/pip install --quiet -r requirements-dev.txt
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Static security gate)
+[Pipeline] sh
++ .venv/bin/bandit -r taskmanager -ll
+[main]	INFO	profile include tests: None
+[main]	INFO	profile exclude tests: None
+[main]	INFO	cli include tests: None
+[main]	INFO	cli exclude tests: None
+[main]	INFO	running on Python 3.11.2
+Run started:2026-11-27 16:35:12.280320
+
+Test results:
+	No issues identified.
+
+Code scanned:
+	Total lines of code: 1748
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 2
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 3
+		Medium: 0
+		High: 0
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 3
+		High: 0
+Files skipped (0):
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Unit and integration test gate)
+[Pipeline] sh
++ mkdir -p reports
++ .venv/bin/pytest --junitxml=reports/junit.xml --cov --cov-report=xml:reports/coverage.xml
+........................................................................ [ 77%]
+.....................                                                    [100%]
+- generated xml file: /var/jenkins_home/workspace/orbit-lab-ci/reports/junit.xml -
+
+---------- coverage: platform linux, python 3.11.2-final-0 -----------
+Coverage XML written to file reports/coverage.xml
+
+Required test coverage of 85.0% reached. Total coverage: 98.65%
+93 passed in 15.52s
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy and verify readiness)
+[Pipeline] withCredentials
+Masking supported pattern matches of $SECRET_KEY
+[Pipeline] {
+[Pipeline] sh
++ set -eu
++ export DATABASE_URL=sqlite:////tmp/jenkins-lab-2.db
++ APP_PID=1234
++ trap kill "$APP_PID" 2>/dev/null || true EXIT
++ .venv/bin/python -
++ .venv/bin/gunicorn --bind 127.0.0.1:18088 --workers 1 wsgi:app
+PASS: deployment readiness, status=200, database=up
++ kill 1234
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] junit
+Recording test results
+[Checks API] No suitable checks publisher found.
+[Pipeline] archiveArtifacts
+Archiving artifacts
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS

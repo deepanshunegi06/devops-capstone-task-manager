@@ -1,0 +1,205 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.82kB done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1.7
+#2 ...
+
+#3 [auth] docker/dockerfile:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1.7
+#2 DONE 3.0s
+
+#4 docker-image://docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e
+#4 resolve docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e 0.0s done
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/python:3.12-slim
+#5 ...
+
+#6 [auth] library/python:pull token for registry-1.docker.io
+#6 DONE 0.0s
+
+#5 [internal] load metadata for docker.io/library/python:3.12-slim
+#5 DONE 1.7s
+
+#7 [internal] load .dockerignore
+#7 transferring context: 221B done
+#7 DONE 0.0s
+
+#8 [builder 1/4] FROM docker.io/library/python:3.12-slim@sha256:191083cdf6c7bda8c76158983163ead5d5cf7b77cf3033e805bb0f5296f51b4b
+#8 resolve docker.io/library/python:3.12-slim@sha256:191083cdf6c7bda8c76158983163ead5d5cf7b77cf3033e805bb0f5296f51b4b 0.0s done
+#8 CACHED
+
+#9 [internal] load build context
+#9 transferring context: 323.62kB 0.0s done
+#9 DONE 0.0s
+
+#10 [builder 3/4] COPY requirements.txt .
+#10 CACHED
+
+#11 [builder 2/4] WORKDIR /build
+#11 CACHED
+
+#12 [builder 4/4] RUN pip wheel --wheel-dir /wheels -r requirements.txt
+#12 CACHED
+
+#13 [runtime 2/7] RUN apt-get update && apt-get upgrade -y && apt-get clean && rm -rf /var/lib/apt/lists/*  && groupadd --system --gid 10001 app  && useradd --system --uid 10001 --gid app --home-dir /app --shell /usr/sbin/nologin app
+#13 0.240 Hit:1 http://deb.debian.org/debian trixie InRelease
+#13 0.260 Get:2 http://deb.debian.org/debian trixie-updates InRelease [47.3 kB]
+#13 0.309 Get:3 http://deb.debian.org/debian-security trixie-security InRelease [43.4 kB]
+#13 0.385 Get:4 http://deb.debian.org/debian trixie/main arm64 Packages [9615 kB]
+#13 51.78 Get:5 http://deb.debian.org/debian trixie-updates/main arm64 Packages [1108 B]
+#13 51.94 Get:6 http://deb.debian.org/debian-security trixie-security/main arm64 Packages [312 kB]
+#13 53.01 Fetched 10.0 MB in 53s (190 kB/s)
+#13 53.01 Reading package lists...
+#13 53.48 Reading package lists...
+#13 53.98 Building dependency tree...
+#13 54.08 Reading state information...
+#13 54.12 Calculating upgrade...
+#13 54.31 The following packages will be upgraded:
+#13 54.31   libzstd1 login.defs passwd
+#13 150.5 3 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+#13 150.5 Need to get 1659 kB of archives.
+#13 150.5 After this operation, 0 B of additional disk space will be used.
+#13 150.5 Ign:1 http://deb.debian.org/debian-security trixie-security/main arm64 login.defs all 1:4.17.4-2+deb13u1
+#13 150.6 Get:2 http://deb.debian.org/debian-security trixie-security/main arm64 passwd arm64 1:4.17.4-2+deb13u1 [1207 kB]
+#13 151.8 Get:3 http://deb.debian.org/debian-security trixie-security/main arm64 libzstd1 arm64 1.5.7+dfsg-1+deb13u1 [266 kB]
+#13 152.1 Get:1 http://deb.debian.org/debian-security trixie-security/main arm64 login.defs all 1:4.17.4-2+deb13u1 [186 kB]
+#13 152.4 debconf: unable to initialize frontend: Dialog
+#13 152.4 debconf: (TERM is not set, so the dialog frontend is not usable.)
+#13 152.4 debconf: falling back to frontend: Readline
+#13 152.4 debconf: unable to initialize frontend: Readline
+#13 152.4 debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/aarch64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/aarch64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/aarch64-linux-gnu/perl-base /usr/lib/aarch64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8, <STDIN> line 3.)
+#13 152.4 debconf: falling back to frontend: Teletype
+#13 152.4 debconf: unable to initialize frontend: Teletype
+#13 152.4 debconf: (This frontend requires a controlling tty.)
+#13 152.4 debconf: falling back to frontend: Noninteractive
+#13 153.0 Fetched 1659 kB in 1min 38s (17.0 kB/s)
+#13 153.0 (Reading database ... 
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 5654 files and directories currently installed.)
+#13 153.1 Preparing to unpack .../login.defs_1%3a4.17.4-2+deb13u1_all.deb ...
+#13 153.1 Unpacking login.defs (1:4.17.4-2+deb13u1) over (1:4.17.4-2) ...
+#13 153.1 Setting up login.defs (1:4.17.4-2+deb13u1) ...
+#13 153.1 (Reading database ... 
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 5654 files and directories currently installed.)
+#13 153.1 Preparing to unpack .../passwd_1%3a4.17.4-2+deb13u1_arm64.deb ...
+#13 153.1 Unpacking passwd (1:4.17.4-2+deb13u1) over (1:4.17.4-2) ...
+#13 153.2 Setting up passwd (1:4.17.4-2+deb13u1) ...
+#13 153.3 (Reading database ... 
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 5654 files and directories currently installed.)
+#13 153.3 Preparing to unpack .../libzstd1_1.5.7+dfsg-1+deb13u1_arm64.deb ...
+#13 153.3 Unpacking libzstd1:arm64 (1.5.7+dfsg-1+deb13u1) over (1.5.7+dfsg-1) ...
+#13 153.3 Setting up libzstd1:arm64 (1.5.7+dfsg-1+deb13u1) ...
+#13 153.3 Processing triggers for libc-bin (2.41-12+deb13u5) ...
+#13 153.4 useradd warning: app's uid 10001 is greater than SYS_UID_MAX 999
+#13 DONE 153.4s
+
+#14 [runtime 3/7] WORKDIR /app
+#14 DONE 0.0s
+
+#15 [runtime 4/7] COPY --from=builder /wheels /wheels
+#15 DONE 0.0s
+
+#16 [runtime 5/7] RUN pip install --no-cache-dir --no-index --find-links=/wheels /wheels/*.whl && rm -rf /wheels
+#16 1.263 Looking in links: /wheels
+#16 1.265 Processing /wheels/SQLAlchemy-2.0.36-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+#16 1.278 Processing /wheels/blinker-1.9.0-py3-none-any.whl
+#16 1.279 Processing /wheels/click-8.5.1-py3-none-any.whl
+#16 1.280 Processing /wheels/flask-3.0.3-py3-none-any.whl
+#16 1.282 Processing /wheels/flask_sqlalchemy-3.1.1-py3-none-any.whl
+#16 1.283 Processing /wheels/greenlet-3.5.6-cp312-cp312-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl
+#16 1.285 Processing /wheels/gunicorn-23.0.0-py3-none-any.whl
+#16 1.287 Processing /wheels/itsdangerous-2.2.0-py3-none-any.whl
+#16 1.287 Processing /wheels/jinja2-3.1.6-py3-none-any.whl
+#16 1.289 Processing /wheels/markupsafe-3.0.4-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl
+#16 1.290 Processing /wheels/packaging-26.4-py3-none-any.whl
+#16 1.291 Processing /wheels/prometheus_client-0.21.0-py3-none-any.whl
+#16 1.292 Processing /wheels/psycopg2_binary-2.9.10-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+#16 1.296 Processing /wheels/typing_extensions-4.16.0-py3-none-any.whl
+#16 1.297 Processing /wheels/werkzeug-3.1.9-py3-none-any.whl
+#16 1.319 Installing collected packages: typing-extensions, psycopg2-binary, prometheus-client, packaging, markupsafe, itsdangerous, greenlet, click, blinker, werkzeug, SQLAlchemy, jinja2, gunicorn, flask, flask-sqlalchemy
+#16 2.864 Successfully installed SQLAlchemy-2.0.36 blinker-1.9.0 click-8.5.1 flask-3.0.3 flask-sqlalchemy-3.1.1 greenlet-3.5.6 gunicorn-23.0.0 itsdangerous-2.2.0 jinja2-3.1.6 markupsafe-3.0.4 packaging-26.4 prometheus-client-0.21.0 psycopg2-binary-2.9.10 typing-extensions-4.16.0 werkzeug-3.1.9
+#16 2.864 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#16 DONE 3.0s
+
+#17 [runtime 6/7] COPY --chown=app:app taskmanager ./taskmanager
+#17 DONE 0.1s
+
+#18 [runtime 7/7] COPY --chown=app:app wsgi.py gunicorn.conf.py ./
+#18 DONE 0.0s
+
+#19 exporting to image
+#19 exporting layers
+#19 exporting layers 1.3s done
+#19 exporting manifest sha256:bc999eff90b77c285c3c93d04853ca135abd319218275b2ffa5de23afa239d83 done
+#19 exporting config sha256:188d3d31ea399b95d1b00acaa6173acc158110f0096ac8c7e7ede129af176936 done
+#19 exporting attestation manifest sha256:33c30392bd1e3c80f62a4d599e3527278d88d1782ba122d3733c19b7dc8b7f00 done
+#19 exporting manifest list sha256:38f3decb3f2ce3ff7eb81fec8702520b1dcc962bbf26cfd7f042207f15487dc8 done
+#19 naming to docker.io/library/orbit-labs-app:2.0.1 done
+#19 unpacking to docker.io/library/orbit-labs-app:2.0.1
+#19 unpacking to docker.io/library/orbit-labs-app:2.0.1 0.4s done
+#19 DONE 1.7s

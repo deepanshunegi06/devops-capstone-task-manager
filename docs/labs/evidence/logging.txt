@@ -1,0 +1,28 @@
+{
+  "collector": "Fluentd",
+  "records_forwarded": 100,
+  "indexed_total": {
+    "value": 100,
+    "relation": "eq"
+  },
+  "parsing_fields": [
+    "timestamp",
+    "level",
+    "logger",
+    "message",
+    "service",
+    "version",
+    "deploy_color",
+    "request_id",
+    "method",
+    "path",
+    "status",
+    "duration_ms",
+    "remote_addr",
+    "environment",
+    "source_tag",
+    "@timestamp",
+    "tag"
+  ],
+  "kibana_data_view": "c73dae44-869c-4688-bead-4c4927b375b5"
+}

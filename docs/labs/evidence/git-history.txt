@@ -1,0 +1,15 @@
+d2e2e80 Merge pull request: Orbit v2 into develop
+4dc3fd0 Docs for v2: README features and screenshots
+186fff1 DevOps for v2: business metrics + Grafana panels, demo workspace seeding, gunicorn preload on Linux, v2.0.0 manifests
+74ee37a Tests for v2: quick-add grammar, permissions, views, analytics, CSRF for cookie API (93 tests, 98.6% coverage)
+18b0d90 Orbit v2 UI: single-page app with list, board, calendar, matrix, analytics, focus timer, command palette, dark mode
+283a44f Orbit v2 backend: projects, sharing roles, labels, subtasks, comments, activity, quick add, recurrence, analytics, focus, export
+13015dd Merge branch 'feature/docs' into develop
+edb272d Merge branch 'feature/observability' into develop
+6ed7afe Add README, architecture diagram, security notes, setup runbook and evidence
+21860d5 Merge branch 'feature/infra-automation' into develop
+2ce2a1d Add log analyzer with error-rate anomaly detection and log template clustering
+245b4e7 Merge branch 'feature/kubernetes' into develop
+5c39f86 Add Ansible playbooks: configuration management, Docker, kubeadm cluster, app deployment
+08f19e8 Add EFK centralized logging for Docker Compose and Kubernetes (Fluentd DaemonSet)
+54cf15a Add Helm chart with blue-green support

@@ -1,0 +1,2 @@
+NAME         STATUS   ROLES           AGE   VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION    CONTAINER-RUNTIME
+orbit-labs   Ready    control-plane   72s   v1.31.2   192.168.49.2   <none>        Ubuntu 22.04.4 LTS   7.0.14-linuxkit   docker://27.2.0

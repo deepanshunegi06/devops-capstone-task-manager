@@ -4,7 +4,7 @@ metadata:
   name: orbit-lab-gitops
   namespace: argocd
 spec:
-  project: default
+  project: orbit-lab
   source:
     repoURL: https://github.com/deepanshunegi06/devops-capstone-task-manager.git
     targetRevision: labs-2026-11-27

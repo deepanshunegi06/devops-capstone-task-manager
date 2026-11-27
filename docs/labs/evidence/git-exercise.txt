@@ -1,0 +1,18 @@
+Initialized empty Git repository in [lab-workspace]/git-exercise/.git/
+[main (root-commit) eade5c1] Initialize lab repository
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+Switched to a new branch 'feature/health-check'
+[feature/health-check 409fda3] Document readiness check
+ 1 file changed, 1 insertion(+)
+ create mode 100644 health-check.txt
+Switched to branch 'main'
+Merge made by the 'ort' strategy.
+ health-check.txt | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 health-check.txt
+*   9f4017b Merge readiness check exercise
+|\  
+| * 409fda3 Document readiness check
+|/  
+* eade5c1 Initialize lab repository

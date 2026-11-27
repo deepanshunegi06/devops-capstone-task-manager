@@ -1,0 +1,101 @@
+# HELP python_gc_objects_collected_total Objects collected during gc
+# TYPE python_gc_objects_collected_total counter
+python_gc_objects_collected_total{generation="0"} 2820.0
+python_gc_objects_collected_total{generation="1"} 30.0
+python_gc_objects_collected_total{generation="2"} 0.0
+# HELP python_gc_objects_uncollectable_total Uncollectable objects found during GC
+# TYPE python_gc_objects_uncollectable_total counter
+python_gc_objects_uncollectable_total{generation="0"} 0.0
+python_gc_objects_uncollectable_total{generation="1"} 0.0
+python_gc_objects_uncollectable_total{generation="2"} 0.0
+# HELP python_gc_collections_total Number of times this generation was collected
+# TYPE python_gc_collections_total counter
+python_gc_collections_total{generation="0"} 165.0
+python_gc_collections_total{generation="1"} 14.0
+python_gc_collections_total{generation="2"} 1.0
+# HELP python_info Python platform information
+# TYPE python_info gauge
+python_info{implementation="CPython",major="3",minor="12",patchlevel="16",version="3.12.16"} 1.0
+# HELP process_virtual_memory_bytes Virtual memory size in bytes.
+# TYPE process_virtual_memory_bytes gauge
+process_virtual_memory_bytes 3.93457664e+08
+# HELP process_resident_memory_bytes Resident memory size in bytes.
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 6.2828544e+07
+# HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
+# TYPE process_start_time_seconds gauge
+process_start_time_seconds 1.79579644103e+09
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 0.34
+# HELP process_open_fds Number of open file descriptors.
+# TYPE process_open_fds gauge
+process_open_fds 17.0
+# HELP process_max_fds Maximum number of open file descriptors.
+# TYPE process_max_fds gauge
+process_max_fds 1.048576e+06
+# HELP taskmanager_http_requests_total Total HTTP requests
+# TYPE taskmanager_http_requests_total counter
+taskmanager_http_requests_total{endpoint="/health/live",method="GET",status="200"} 7.0
+taskmanager_http_requests_total{endpoint="/health/ready",method="GET",status="200"} 98.0
+# HELP taskmanager_http_requests_created Total HTTP requests
+# TYPE taskmanager_http_requests_created gauge
+taskmanager_http_requests_created{endpoint="/health/live",method="GET",status="200"} 1.7957964750699668e+09
+taskmanager_http_requests_created{endpoint="/health/ready",method="GET",status="200"} 1.7957966102138374e+09
+# HELP taskmanager_http_request_duration_seconds HTTP request latency
+# TYPE taskmanager_http_request_duration_seconds histogram
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/live",le="0.005",method="GET"} 7.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/live",le="0.01",method="GET"} 7.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/live",le="0.025",method="GET"} 7.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/live",le="0.05",method="GET"} 7.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/live",le="0.1",method="GET"} 7.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/live",le="0.25",method="GET"} 7.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/live",le="0.5",method="GET"} 7.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/live",le="1.0",method="GET"} 7.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/live",le="2.5",method="GET"} 7.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/live",le="5.0",method="GET"} 7.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/live",le="+Inf",method="GET"} 7.0
+taskmanager_http_request_duration_seconds_count{endpoint="/health/live",method="GET"} 7.0
+taskmanager_http_request_duration_seconds_sum{endpoint="/health/live",method="GET"} 0.0016267489999961526
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/ready",le="0.005",method="GET"} 93.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/ready",le="0.01",method="GET"} 98.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/ready",le="0.025",method="GET"} 98.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/ready",le="0.05",method="GET"} 98.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/ready",le="0.1",method="GET"} 98.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/ready",le="0.25",method="GET"} 98.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/ready",le="0.5",method="GET"} 98.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/ready",le="1.0",method="GET"} 98.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/ready",le="2.5",method="GET"} 98.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/ready",le="5.0",method="GET"} 98.0
+taskmanager_http_request_duration_seconds_bucket{endpoint="/health/ready",le="+Inf",method="GET"} 98.0
+taskmanager_http_request_duration_seconds_count{endpoint="/health/ready",method="GET"} 98.0
+taskmanager_http_request_duration_seconds_sum{endpoint="/health/ready",method="GET"} 0.1948448329996495
+# HELP taskmanager_http_request_duration_seconds_created HTTP request latency
+# TYPE taskmanager_http_request_duration_seconds_created gauge
+taskmanager_http_request_duration_seconds_created{endpoint="/health/live",method="GET"} 1.795796475070012e+09
+taskmanager_http_request_duration_seconds_created{endpoint="/health/ready",method="GET"} 1.795796610213885e+09
+# HELP taskmanager_http_requests_in_progress Requests currently being served
+# TYPE taskmanager_http_requests_in_progress gauge
+taskmanager_http_requests_in_progress 1.0
+# HELP taskmanager_tasks Number of tasks by status
+# TYPE taskmanager_tasks gauge
+taskmanager_tasks{status="todo"} 20.0
+taskmanager_tasks{status="in_progress"} 3.0
+taskmanager_tasks{status="done"} 86.0
+# HELP taskmanager_users Number of registered users
+# TYPE taskmanager_users gauge
+taskmanager_users 3.0
+# HELP taskmanager_app_info Application build information
+# TYPE taskmanager_app_info gauge
+taskmanager_app_info{deploy_color="blue",version="2.0.0"} 1.0
+# HELP taskmanager_tasks_created_total Tasks created
+# TYPE taskmanager_tasks_created_total counter
+# HELP taskmanager_tasks_completed_total Tasks completed
+# TYPE taskmanager_tasks_completed_total counter
+# HELP taskmanager_focus_minutes_total Minutes logged in focus (Pomodoro) sessions
+# TYPE taskmanager_focus_minutes_total counter
+taskmanager_focus_minutes_total 0.0
+# HELP taskmanager_focus_minutes_created Minutes logged in focus (Pomodoro) sessions
+# TYPE taskmanager_focus_minutes_created gauge
+taskmanager_focus_minutes_created 1.7957964405096974e+09
+

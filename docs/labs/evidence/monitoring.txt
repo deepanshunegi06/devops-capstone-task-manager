@@ -1,0 +1,6 @@
+cadvisor: down
+node: down
+postgres: up
+prometheus: up
+taskmanager: up
+Application metrics are reachable through the internal backend network. Host exporters were not started in the limited lab stack.

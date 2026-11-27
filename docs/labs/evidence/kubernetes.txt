@@ -1,0 +1,79 @@
+$ kubectl apply -f [lab-workspace]/project/labs/kubernetes.yaml
+namespace/orbit-exercise created
+deployment.apps/orbit-blue created
+service/orbit-live created
+
+$ kubectl -n orbit-exercise rollout status deployment/orbit-blue --timeout=180s
+Waiting for deployment "orbit-blue" rollout to finish: 0 of 1 updated replicas are available...
+deployment "orbit-blue" successfully rolled out
+
+$ kubectl -n orbit-exercise get pods -o wide
+NAME                          READY   STATUS    RESTARTS   AGE   IP           NODE         NOMINATED NODE   READINESS GATES
+orbit-blue-68b58d76cb-ctd5c   1/1     Running   0          3s    10.244.0.3   orbit-labs   <none>           <none>
+
+$ kubectl -n orbit-exercise scale deployment/orbit-blue --replicas=3
+deployment.apps/orbit-blue scaled
+
+$ kubectl -n orbit-exercise rollout status deployment/orbit-blue --timeout=180s
+Waiting for deployment "orbit-blue" rollout to finish: 1 of 3 updated replicas are available...
+Waiting for deployment "orbit-blue" rollout to finish: 2 of 3 updated replicas are available...
+deployment "orbit-blue" successfully rolled out
+
+$ kubectl -n orbit-exercise get deployment orbit-blue
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+orbit-blue   3/3     3            3           7s
+
+$ kubectl -n orbit-exercise set env deployment/orbit-blue APP_VERSION=2.0.2-rolling
+deployment.apps/orbit-blue env updated
+
+$ kubectl -n orbit-exercise rollout status deployment/orbit-blue --timeout=180s
+Waiting for deployment "orbit-blue" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "orbit-blue" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "orbit-blue" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "orbit-blue" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "orbit-blue" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "orbit-blue" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "orbit-blue" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "orbit-blue" rollout to finish: 1 old replicas are pending termination...
+deployment "orbit-blue" successfully rolled out
+
+$ kubectl -n orbit-exercise rollout history deployment/orbit-blue
+deployment.apps/orbit-blue 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+
+
+$ kubectl -n orbit-exercise rollout undo deployment/orbit-blue
+deployment.apps/orbit-blue rolled back
+Warning: resource deployments/orbit-blue was previously managed with 'kubectl apply'. Rolling back will not update the kubectl.kubernetes.io/last-applied-configuration annotation, which may cause unexpected behavior on future 'kubectl apply' operations. Consider using 'kubectl apply' with your previous configuration file instead.
+
+$ kubectl -n orbit-exercise rollout status deployment/orbit-blue --timeout=180s
+Waiting for deployment "orbit-blue" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "orbit-blue" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "orbit-blue" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "orbit-blue" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "orbit-blue" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "orbit-blue" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "orbit-blue" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "orbit-blue" rollout to finish: 1 old replicas are pending termination...
+deployment "orbit-blue" successfully rolled out
+
+$ kubectl -n orbit-exercise exec deployment/orbit-blue -- python -c import urllib.request; print(urllib.request.urlopen("http://127.0.0.1:5000/health/ready").read().decode()); print(urllib.request.urlopen("http://orbit-live/version").read().decode())
+{"database":"up","status":"ok"}
+
+{"color":"blue","version":"2.0.1"}
+
+
+$ kubectl -n orbit-exercise get pods,deployments,services -o wide
+NAME                              READY   STATUS        RESTARTS   AGE   IP            NODE         NOMINATED NODE   READINESS GATES
+pod/orbit-blue-68b58d76cb-c2vxv   1/1     Running       0          7s    10.244.0.11   orbit-labs   <none>           <none>
+pod/orbit-blue-68b58d76cb-n9ggq   1/1     Running       0          11s   10.244.0.10   orbit-labs   <none>           <none>
+pod/orbit-blue-68b58d76cb-z2phd   1/1     Running       0          14s   10.244.0.9    orbit-labs   <none>           <none>
+pod/orbit-blue-7558677467-dg2tk   1/1     Terminating   0          27s   10.244.0.6    orbit-labs   <none>           <none>
+
+NAME                         READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                 SELECTOR
+deployment.apps/orbit-blue   3/3     3            3           34s   app          orbit-labs-app:2.0.1   app=orbit-exercise,color=blue
+
+NAME                 TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+service/orbit-live   ClusterIP   10.109.120.251   <none>        80/TCP    34s   app=orbit-exercise,color=blue

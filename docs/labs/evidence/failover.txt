@@ -1,0 +1,33 @@
+{
+  "scenario": "shared upstream state and bounded retries; blue primary stopped, green backup",
+  "requests": 30,
+  "success": 30,
+  "green": 30,
+  "samples": [
+    {
+      "status": 200,
+      "body": {
+        "color": "green",
+        "version": "2.0.1"
+      },
+      "ms": 1028.1039999999998
+    },
+    {
+      "status": 200,
+      "body": {
+        "color": "green",
+        "version": "2.0.1"
+      },
+      "ms": 1140.7745839999998
+    },
+    {
+      "status": 200,
+      "body": {
+        "color": "green",
+        "version": "2.0.1"
+      },
+      "ms": 1245.106292
+    }
+  ],
+  "errors": []
+}

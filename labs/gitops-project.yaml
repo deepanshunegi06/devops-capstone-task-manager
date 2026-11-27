@@ -1,0 +1,9 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata: {name: orbit-lab, namespace: argocd}
+spec:
+  sourceRepos: ['https://github.com/deepanshunegi06/devops-capstone-task-manager.git']
+  destinations:
+    - {server: 'https://kubernetes.default.svc', namespace: orbit-exercise}
+  clusterResourceWhitelist:
+    - {group: '', kind: Namespace}

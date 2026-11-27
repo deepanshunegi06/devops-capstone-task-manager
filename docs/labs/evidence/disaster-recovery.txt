@@ -1,0 +1,14 @@
+pg_dump source taskmanager: 43711 bytes
+$ docker exec orbit-labs-db-1 createdb -U taskmanager orbit_lab_restore
+
+
+$ docker exec orbit-labs-db-1 psql -U taskmanager -d taskmanager -Atc SELECT count(*) FROM tasks;
+109
+
+
+$ docker exec orbit-labs-db-1 psql -U taskmanager -d orbit_lab_restore -Atc SELECT count(*) FROM tasks;
+109
+
+
+Backup/create/restore/verify duration: 0.463s
+RPO objective: <=24h with nightly backups. RTO objective: <=5min for lab-sized database. This run measures local restore only, not regional failover.

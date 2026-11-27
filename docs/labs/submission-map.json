@@ -1,0 +1,212 @@
+[
+  {
+    "lab": 1,
+    "question": 1,
+    "title": "Record all commands",
+    "file": "Lab_1_Q01.pdf",
+    "bytes": 298911
+  },
+  {
+    "lab": 1,
+    "question": 2,
+    "title": "CI/CD workflow report",
+    "file": "Lab_1_Q02.pdf",
+    "bytes": 304003
+  },
+  {
+    "lab": 1,
+    "question": 3,
+    "title": "Automated application deployment",
+    "file": "Lab_1_Q03.pdf",
+    "bytes": 296764
+  },
+  {
+    "lab": 1,
+    "question": 4,
+    "title": "Install and configure Git and Jenkins",
+    "file": "Lab_1_Q04.pdf",
+    "bytes": 299498
+  },
+  {
+    "lab": 1,
+    "question": 5,
+    "title": "Version control with Git",
+    "file": "Lab_1_Q05.pdf",
+    "bytes": 294285
+  },
+  {
+    "lab": 1,
+    "question": 6,
+    "title": "Basic Jenkins CI/CD pipeline",
+    "file": "Lab_1_Q06.pdf",
+    "bytes": 296304
+  },
+  {
+    "lab": 1,
+    "question": 7,
+    "title": "Jenkinsfile stages",
+    "file": "Lab_1_Q07.pdf",
+    "bytes": 296210
+  },
+  {
+    "lab": 2,
+    "question": 1,
+    "title": "Kubernetes application deployment",
+    "file": "Lab_2_Q01.pdf",
+    "bytes": 166267
+  },
+  {
+    "lab": 2,
+    "question": 2,
+    "title": "Rolling updates, rollback and scaling",
+    "file": "Lab_2_Q02.pdf",
+    "bytes": 165553
+  },
+  {
+    "lab": 2,
+    "question": 3,
+    "title": "Containerization and orchestration report",
+    "file": "Lab_2_Q03.pdf",
+    "bytes": 176810
+  },
+  {
+    "lab": 2,
+    "question": 4,
+    "title": "Dockerfile, image and container behavior",
+    "file": "Lab_2_Q04.pdf",
+    "bytes": 175300
+  },
+  {
+    "lab": 2,
+    "question": 5,
+    "title": "Manage Docker containers and images",
+    "file": "Lab_2_Q05.pdf",
+    "bytes": 171711
+  },
+  {
+    "lab": 2,
+    "question": 6,
+    "title": "Docker storage",
+    "file": "Lab_2_Q06.pdf",
+    "bytes": 162537
+  },
+  {
+    "lab": 2,
+    "question": 7,
+    "title": "Docker networking",
+    "file": "Lab_2_Q07.pdf",
+    "bytes": 162396
+  },
+  {
+    "lab": 2,
+    "question": 8,
+    "title": "Continuous deployment to Kubernetes",
+    "file": "Lab_2_Q08.pdf",
+    "bytes": 170665
+  },
+  {
+    "lab": 2,
+    "question": 9,
+    "title": "Docker and Kubernetes experiment record",
+    "file": "Lab_2_Q09.pdf",
+    "bytes": 171185
+  },
+  {
+    "lab": 3,
+    "question": 1,
+    "title": "Ansible configuration automation",
+    "file": "Lab_3_Q01.pdf",
+    "bytes": 100754
+  },
+  {
+    "lab": 3,
+    "question": 2,
+    "title": "Terraform infrastructure provisioning",
+    "file": "Lab_3_Q02.pdf",
+    "bytes": 103796
+  },
+  {
+    "lab": 3,
+    "question": 3,
+    "title": "Centralized logging",
+    "file": "Lab_3_Q03.pdf",
+    "bytes": 100699
+  },
+  {
+    "lab": 3,
+    "question": 4,
+    "title": "DevSecOps pipeline",
+    "file": "Lab_3_Q04.pdf",
+    "bytes": 106124
+  },
+  {
+    "lab": 3,
+    "question": 5,
+    "title": "Prometheus and Grafana monitoring",
+    "file": "Lab_3_Q05.pdf",
+    "bytes": 101921
+  },
+  {
+    "lab": 3,
+    "question": 6,
+    "title": "Feature flags, load and Selenium tests",
+    "file": "Lab_3_Q06.pdf",
+    "bytes": 297639
+  },
+  {
+    "lab": 3,
+    "question": 7,
+    "title": "Monitoring, logging and DevSecOps report",
+    "file": "Lab_3_Q07.pdf",
+    "bytes": 105439
+  },
+  {
+    "lab": 4,
+    "question": 1,
+    "title": "Disaster recovery",
+    "file": "Lab_4_Q01.pdf",
+    "bytes": 100669
+  },
+  {
+    "lab": 4,
+    "question": 2,
+    "title": "Automated testing gates",
+    "file": "Lab_4_Q02.pdf",
+    "bytes": 298289
+  },
+  {
+    "lab": 4,
+    "question": 3,
+    "title": "Blue-green deployment",
+    "file": "Lab_4_Q03.pdf",
+    "bytes": 101037
+  },
+  {
+    "lab": 4,
+    "question": 4,
+    "title": "GitOps delivery",
+    "file": "Lab_4_Q04.pdf",
+    "bytes": 100898
+  },
+  {
+    "lab": 4,
+    "question": 5,
+    "title": "Advanced deployment strategies report",
+    "file": "Lab_4_Q05.pdf",
+    "bytes": 104684
+  },
+  {
+    "lab": 4,
+    "question": 6,
+    "title": "Secret management",
+    "file": "Lab_4_Q06.pdf",
+    "bytes": 101181
+  },
+  {
+    "lab": 4,
+    "question": 7,
+    "title": "Canary deployment",
+    "file": "Lab_4_Q07.pdf",
+    "bytes": 101811
+  }
+]

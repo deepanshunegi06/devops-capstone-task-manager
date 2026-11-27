@@ -1,0 +1,34 @@
+ArgoCD application: {
+  "sync": {
+    "comparedTo": {
+      "destination": {
+        "namespace": "orbit-exercise",
+        "server": "https://kubernetes.default.svc"
+      },
+      "source": {
+        "path": "labs/k8s-gitops",
+        "repoURL": "https://github.com/deepanshunegi06/devops-capstone-task-manager.git",
+        "targetRevision": "labs-2026-11-27"
+      }
+    },
+    "revision": "2064fafd10873b5aaa63f9dc8ca0996d568fa563",
+    "status": "Synced"
+  },
+  "health": {
+    "status": "Healthy"
+  },
+  "operationState": "Succeeded"
+}
+Desired replica count from Git: 1
+deployment.apps/orbit-blue scaled
+
+Observed replica count returned to 1 without manual apply after 2.21s
+NAME               SYNC STATUS   HEALTH STATUS
+orbit-lab-gitops   Synced        Healthy
+
+NAME                         READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/orbit-blue   1/1     1            1           4m59s
+
+NAME                              READY   STATUS        RESTARTS   AGE
+pod/orbit-blue-68b58d76cb-gvfnw   0/1     Terminating   0          2s
+pod/orbit-blue-68b58d76cb-n9ggq   1/1     Running       0          4m36s

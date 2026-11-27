@@ -6,5 +6,6 @@ USER fluent
 USER root
 # Keep the Ruby client compatible with the Elasticsearch 8.x server.
 RUN gem install --no-document elasticsearch -v 8.15.0 \
- && gem uninstall --all --executables --ignore-dependencies -v '>= 9' elasticsearch elasticsearch-api
+ && gem uninstall --all --executables --ignore-dependencies -v '>= 9' elasticsearch \
+ && gem uninstall --all --executables --ignore-dependencies -v '>= 9' elasticsearch-api
 USER fluent
